@@ -26,7 +26,11 @@ import argparse
 parser = argparse.ArgumentParser(description='create database for ',prog='mutatedSequence')
 parser.add_argument('-d','--DB',type=str,help='database path for cds and transcripts')
 parser.add_argument('-r','--resource',type=str,help='ensembl database path for resource')
+parser.add_argument('-r','--resource',type=str,help='input VCF file for a sample')
 parser.add_argument('-e','--expand',default=5000,type=int,help='extend 5000bp for last cds region,make the 5kbp region as the last "cds" region for a transcript')
+
+
+__release__ == ''
 
 def findResourceFiles(path,key,standard):
   if path
@@ -63,7 +67,7 @@ df['V'],df['chr'],df['start'],df['end'],df['strand'] = zip(*df['description'].ap
 ## 对cds文件进行校验
 logger.info('对cds文件进行校验')
 length = df['end'].astype(int)-df['start'].astype(int)+1
-Counter(length==df['seq'].apply(len))
+# Counter(length==df['seq'].apply(len))
 enspDf = pd.DataFrame([{'id':p.id,'name':p.name,'description':p.description,'seq':str(p.seq)} for p in parseFile(enspFa)])
 enspDf['description'] = enspDf['description'].apply(lambda x:x.split(' ',2)[-1])
 enspDf['V'],enspDf['chr'],enspDf['start'],enspDf['end'],enspDf['strand'] = zip(*enspDf['description'].apply(lambda x:x.replace('chromosome:','').split(' ')[0].replace('scaffold:','').split(':')))
