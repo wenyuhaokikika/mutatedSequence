@@ -1,0 +1,59 @@
+#!/bin/bash
+###
+ # @Description: 
+ # @version: 
+ # @Author: wenyuhao
+ # @Date: 2023-05-13 09:33:51
+ # @LastEditors: wenyuhao
+ # @LastEditTime: 2023-05-18 11:11:54
+### 
+filepath=$(cd "$(dirname "$0")"; pwd) # 获取当前文件夹的绝对路径
+sh $filepath/mutatedCDNAseq.sh;
+python $filepath/mutatedProteins.py;
+
+# 运行的时候运行两个样本，外加一个没有突变的样本，通过没有突变的样本和原始ensembl提供的蛋白序列文件比对，来确定运行是否正确。
+
+DIR=/data/wenyuhao/55/ensembl/ensembl109
+progDir=/data/wenyuhao/55/ensembl/ensembl109/db/mutatedSequence
+database=$DIR/db2
+R=109
+e=5000
+out=/data/wenyuhao/55/ensembl/ensembl109/db/SRR10129631
+mutations=/data/wenyuhao/tmp/runWGS/tmp/SRR10129631_results/annotated/all.vcf.gz
+
+awk -F '\t' '{print ">"$1":"$2"-"$3" transcript_id:"$5";rank:"$4";strand:"$6";stopWithCodon:"$7";addHead:"$8"\n"$9}' $database/cds.bed  | seqkit seq -w 60 > $database/cds.fa;
+bcftools consensus -f $database/cds.fa $out/all.vcf.gz -o $out/mutated.fa  
+
+python $progDir/createDB.py -d $database -r $DIR -R $R -e $e
+
+sh $progDir/mutatedCDNAseq.sh \
+-m $mutations \
+-d $database \
+-o $out
+
+python $progDir/mutatedProteins.py \
+-b $out/mutated.bed \
+-o $out
+
+
+
+
+
+sh /data/wenyuhao/55/ensembl/ensembl109/db/mutatedSequence/mutatedCDNAseq.sh \
+-m /data/wenyuhao/55/ensembl/ensembl109/db1/tmp/test.vcf.gz \
+-d /data/wenyuhao/55/ensembl/ensembl109/db2 \
+-o /data/wenyuhao/55/ensembl/ensembl109/db1/tmp
+
+python /data/wenyuhao/55/ensembl/ensembl109/db/mutatedSequence/mutatedProteins.py \
+-b /data/wenyuhao/55/ensembl/ensembl109/db1/tmp/mutated.bed \
+-o /data/wenyuhao/55/ensembl/ensembl109/db1/tmp
+
+
+
+DIR=/data/wenyuhao/55/ensembl/ensembl109
+progDir=/data/wenyuhao/55/ensembl/ensembl109/db/mutatedSequence
+database=$DIR/db2
+R=109
+e=5000
+out=/data/wenyuhao/55/ensembl/ensembl109/db1/tmp
+mutations=/data/wenyuhao/55/ensembl/ensembl109/db1/tmp/test.vcf.gz
