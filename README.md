@@ -39,3 +39,12 @@ sh ./download.sh 109 # download seqnence GCRh38 109 release from ensembl
 
 结论：大部分转录本(82%)是以终止子停止转录蛋白的，但是也有部分(18%)的转录本不以标准的密码子就结束了转录，在处理时，我们对于以标准密码子结束的转录本对翻译结束位点延长一些长度（如5000bp），但是对于不以标准的密码子结束的转录本我们不进行延长。
 
+## 处理突变后的结果
+```sh
+# 替换非标准氨基酸
+sed '/^[^>]/s/[BJOUZ]/X/g' all_mutated.fa > all_mutated_filter.fa
+#计算embedding
+alias esmExt="python /data/wenyuhao/code/someProject/esm/scripts/extract.py esm2_t36_3B_UR50D"
+muteFa=/data/wenyuhao/55/ensembl/ensembl98/MS/MS2/result/all_mutated_filter.fa
+esmExt $muteFa all_mutated_filter --repr_layers 0 35 36 --include mean per_tok
+```
