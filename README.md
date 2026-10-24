@@ -194,6 +194,25 @@ portable archive is available at
 `dist/mutatedsequence-2.0.0.tar.gz` after `docker save` (see below; `dist/` is
 git-ignored, so build it yourself if it is absent).
 
+### Prebuilt image (Docker Hub)
+
+The image is published at
+[`wenyuhaobuemoji/mutatedsequence`](https://hub.docker.com/r/wenyuhaobuemoji/mutatedsequence):
+
+```bash
+docker pull wenyuhaobuemoji/mutatedsequence:2.0.0
+docker run -it --rm \
+  -v "${PWD}:/workspace" \
+  -w /workspace \
+  wenyuhaobuemoji/mutatedsequence:2.0.0
+```
+
+Tags: `2.0.0` and `latest`. The image is still **environment-only**; the
+repository is mounted from the host at `/workspace`. The build instructions
+below are only needed if you want to build it yourself. In later examples,
+replace `mutatedsequence:2.0.0` with
+`wenyuhaobuemoji/mutatedsequence:2.0.0` when using the published image.
+
 ### Build
 
 ```bash

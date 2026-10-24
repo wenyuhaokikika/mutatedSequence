@@ -153,6 +153,24 @@ wget/curl 等运行环境。代码必须挂载到 `/workspace`。
 本地已验证：不挂载代码时 `python -m mutatedseq` 会报
 `No module named mutatedseq`；挂载后 10 个测试通过。
 
+### 预构建镜像（Docker Hub）
+
+镜像已发布到
+[`wenyuhaobuemoji/mutatedsequence`](https://hub.docker.com/r/wenyuhaobuemoji/mutatedsequence)：
+
+```bash
+docker pull wenyuhaobuemoji/mutatedsequence:2.0.0
+docker run -it --rm \
+  -v "${PWD}:/workspace" \
+  -w /workspace \
+  wenyuhaobuemoji/mutatedsequence:2.0.0
+```
+
+标签：`2.0.0` 和 `latest`。镜像仍然**只含环境**，代码通过 `-v` 从宿主机
+挂载到 `/workspace`。下面的构建步骤只在你需要自己构建时使用。后续示例里的
+`mutatedsequence:2.0.0` 可以替换为
+`wenyuhaobuemoji/mutatedsequence:2.0.0`。
+
 ### 构建
 
 ```bash
