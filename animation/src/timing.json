@@ -5,7 +5,7 @@
   "voice": "zh-CN-XiaoxiaoNeural",
   "rate": "-2%",
   "pitch": "+0Hz",
-  "backend": "edge-tts / XiaoxiaoNeural",
+  "backend": "edge-tts",
   "totalFrames": 13008,
   "totalSeconds": 433.6,
   "scenes": [
