@@ -7,7 +7,8 @@
     "start": "remotion studio src/index.ts",
     "render": "remotion render src/index.ts Explainer out/explainer.mp4",
     "still": "remotion still src/index.ts Explainer out/still.png",
-    "tts": "python scripts/generate_tts.py"
+    "tts": "python scripts/generate_tts.py",
+    "tts:cosyvoice": "python scripts/generate_tts_cosyvoice.py"
   },
   "dependencies": {
     "@remotion/cli": "4.0.538",

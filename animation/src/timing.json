@@ -2,11 +2,12 @@
   "fps": 30,
   "width": 1920,
   "height": 1080,
-  "voice": "zh-CN-XiaoyiNeural",
-  "rate": "-6%",
-  "pitch": "+2Hz",
-  "totalFrames": 13398,
-  "totalSeconds": 446.6,
+  "voice": "zh-CN-XiaoxiaoNeural",
+  "rate": "-2%",
+  "pitch": "+0Hz",
+  "backend": "edge-tts / XiaoxiaoNeural",
+  "totalFrames": 13008,
+  "totalSeconds": 433.6,
   "scenes": [
     {
       "id": "why",
@@ -18,8 +19,8 @@
         "但中间缺一座桥：VCF → 蛋白序列"
       ],
       "audio": "narration/why.mp3",
-      "seconds": 55.08,
-      "durationInFrames": 1680,
+      "seconds": 53.16,
+      "durationInFrames": 1622,
       "from": 0
     },
     {
@@ -32,9 +33,9 @@
         "剪接、正反方向、缺页，都会让直接翻译出错"
       ],
       "audio": "narration/map.mp3",
-      "seconds": 35.016,
-      "durationInFrames": 1078,
-      "from": 1680
+      "seconds": 34.056,
+      "durationInFrames": 1049,
+      "from": 1622
     },
     {
       "id": "inputs",
@@ -47,9 +48,9 @@
         "输出：cDNA、CDS、蛋白、审计表"
       ],
       "audio": "narration/inputs.mp3",
-      "seconds": 33.456,
-      "durationInFrames": 1031,
-      "from": 2758
+      "seconds": 33.696,
+      "durationInFrames": 1038,
+      "from": 2671
     },
     {
       "id": "ref",
@@ -61,9 +62,9 @@
         "不硬翻译，先提醒"
       ],
       "audio": "narration/ref.mp3",
-      "seconds": 27.504,
-      "durationInFrames": 853,
-      "from": 3789
+      "seconds": 26.856,
+      "durationInFrames": 833,
+      "from": 3709
     },
     {
       "id": "allele",
@@ -75,9 +76,9 @@
         "一个序列只选一个版本；没 phasing 就是 mosaic"
       ],
       "audio": "narration/allele.mp3",
-      "seconds": 32.352,
-      "durationInFrames": 998,
-      "from": 4642
+      "seconds": 31.752,
+      "durationInFrames": 980,
+      "from": 4542
     },
     {
       "id": "blocks",
@@ -89,9 +90,9 @@
         "负链：整段反向互补"
       ],
       "audio": "narration/blocks.mp3",
-      "seconds": 25.68,
-      "durationInFrames": 798,
-      "from": 5640
+      "seconds": 25.632,
+      "durationInFrames": 796,
+      "from": 5522
     },
     {
       "id": "protein",
@@ -103,14 +104,14 @@
         "CDS → 蛋白；补 N、补 stop、保留 3′ UTR"
       ],
       "audio": "narration/protein.mp3",
-      "seconds": 29.424,
-      "durationInFrames": 910,
-      "from": 6438
+      "seconds": 28.032,
+      "durationInFrames": 868,
+      "from": 6318
     },
     {
       "id": "stop",
       "title": "终止密码子失灵",
-      "narration": "你问的那个情况，确实会发生：终止密码子失灵。比如 TAA 被改成 CAA，或者一个 indel 把终止密码子撞坏了。工具会继续沿着同一个阅读框翻译，直到遇见下一个终止密码子，或者走到这条转录本可用序列的尽头。默认它会看剪接后的三撇端 UTR，最多延伸五千个碱基；如果下一个 stop 在转录本之外，可以打开 genomic 延伸；如果一直没有 stop，它会明确标记：stop_lost，蛋白没有正常终止。它不会假装蛋白在第一个 stop 就结束了。",
+      "narration": "还有一种情况：终止密码子失灵。比如 TAA 被改成 CAA，或者一个 indel 把终止密码子撞坏了。工具会继续沿着同一个阅读框翻译，直到遇见下一个终止密码子，或者走到这条转录本可用序列的尽头。默认它会看剪接后的三撇端 UTR，最多延伸五千个碱基；如果下一个 stop 在转录本之外，可以打开 genomic 延伸；如果一直没有 stop，它会明确标记：stop_lost，蛋白没有正常终止。它不会假装蛋白在第一个 stop 就结束了。",
       "captions": [
         "终止密码子失灵：TAA → CAA",
         "继续翻译，直到下一个 stop",
@@ -118,9 +119,9 @@
         "默认延伸 3′ UTR；不会无限翻整条染色体"
       ],
       "audio": "narration/stop.mp3",
-      "seconds": 43.944,
-      "durationInFrames": 1346,
-      "from": 7348
+      "seconds": 40.728,
+      "durationInFrames": 1249,
+      "from": 7186
     },
     {
       "id": "outputs",
@@ -132,9 +133,9 @@
         "TSV + FASTA + normalized VCF"
       ],
       "audio": "narration/outputs.mp3",
-      "seconds": 25.392,
-      "durationInFrames": 789,
-      "from": 8694
+      "seconds": 24.672,
+      "durationInFrames": 768,
+      "from": 8435
     },
     {
       "id": "docker",
@@ -148,9 +149,9 @@
         "--sample 选样本；可选 --cds/--cdna/--pep"
       ],
       "audio": "narration/docker.mp3",
-      "seconds": 19.296,
-      "durationInFrames": 606,
-      "from": 9483
+      "seconds": 18.192,
+      "durationInFrames": 573,
+      "from": 9203
     },
     {
       "id": "compare",
@@ -163,9 +164,9 @@
         "我们：完整序列 + 审计 + 不完整转录本/结构变异"
       ],
       "audio": "narration/compare.mp3",
-      "seconds": 51.624,
-      "durationInFrames": 1576,
-      "from": 10089
+      "seconds": 50.184,
+      "durationInFrames": 1533,
+      "from": 9776
     },
     {
       "id": "limits",
@@ -179,9 +180,9 @@
         "做不到就标记，不猜"
       ],
       "audio": "narration/limits.mp3",
-      "seconds": 38.448,
-      "durationInFrames": 1181,
-      "from": 11665
+      "seconds": 38.232,
+      "durationInFrames": 1174,
+      "from": 11309
     },
     {
       "id": "outro",
@@ -192,9 +193,9 @@
         "开源 · 中英文文档 · 测试数据 · Docker"
       ],
       "audio": "narration/outro.mp3",
-      "seconds": 17.496,
-      "durationInFrames": 552,
-      "from": 12846
+      "seconds": 16.584,
+      "durationInFrames": 525,
+      "from": 12483
     }
   ]
 }

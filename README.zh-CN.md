@@ -104,9 +104,10 @@ flowchart TD
 
 ## 动画短片
 
-仓库里有一支 7 分 26 秒、1080p/30fps 的 Remotion 流程动画，源码在
-[`animation/`](animation/)。旁白使用中文女声 `zh-CN-XiaoyiNeural`
-（rate -6%，pitch +2Hz），十三个镜头按实际配音时长剪辑。
+仓库里有一支 7 分 14 秒、1080p/30fps 的 Remotion 流程动画，源码在
+[`animation/`](animation/)。旁白使用中文女声 `zh-CN-XiaoxiaoNeural`
+（rate -2%），十三个镜头按实际配音时长剪辑。CosyVoice2 本地配音的对比和
+用法见 [`animation/TTS_OPTIONS.md`](animation/TTS_OPTIONS.md)。
 
 - 分镜与导演说明：[`animation/STORYBOARD.md`](animation/STORYBOARD.md)
 - 源码与渲染说明：[`animation/README.md`](animation/README.md)
@@ -115,6 +116,12 @@ flowchart TD
 - 内容包括：WGS→AI 的缺口、菜谱比喻、输入、REF 校验、等位基因、genomic blocks、
   cDNA/CDS/蛋白、终止密码子失灵、可审计 TSV、Docker 用法、工具对比、
   诚实边界和结尾。
+
+## 论文草稿
+
+bioRxiv 风格的论文草稿在 [`paper/`](paper/)：可编辑 Markdown、PDF 和 DOCX、
+300 dpi 图、cover letter 和投稿检查清单。作者、单位、通讯邮箱和 license
+目前是占位符，投稿前必须补全。
 
 ## 2. 安装
 

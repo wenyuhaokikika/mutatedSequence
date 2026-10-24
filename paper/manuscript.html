@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>mutatedSequence — manuscript draft</title>
+<style>
+@page {
+  size: A4;
+  margin: 20mm 18mm 20mm 18mm;
+}
+html { font-size: 10.5pt; }
+body {
+  font-family: "Source Serif 4", "Charter", "Georgia", "Times New Roman", serif;
+  color: #1f2a30;
+  line-height: 1.48;
+  max-width: 100%;
+  margin: 0;
+}
+h1 {
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  font-size: 20pt;
+  line-height: 1.2;
+  margin: 0 0 10pt 0;
+  color: #22333B;
+}
+h2 {
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  font-size: 13.5pt;
+  margin: 20pt 0 6pt 0;
+  padding-bottom: 2pt;
+  border-bottom: 0.6pt solid #cfc8ba;
+  color: #22333B;
+  page-break-after: avoid;
+}
+h3 {
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  font-size: 11.5pt;
+  margin: 14pt 0 4pt 0;
+  color: #2A6F6A;
+  page-break-after: avoid;
+}
+p { margin: 0 0 7pt 0; text-align: justify; }
+strong { color: #16242a; }
+em { font-style: italic; }
+a { color: #1f6f78; text-decoration: none; }
+hr { border: 0; border-top: 0.5pt solid #d8d2c4; margin: 14pt 0; }
+code {
+  font-family: "SFMono-Regular", Consolas, monospace;
+  font-size: 8.8pt;
+  background: #f4f1e8;
+  padding: 0 2pt;
+  border-radius: 2pt;
+}
+pre {
+  font-family: "SFMono-Regular", Consolas, monospace;
+  font-size: 8.4pt;
+  background: #f8f5ed;
+  border: 0.5pt solid #e3ddd0;
+  padding: 7pt;
+  white-space: pre-wrap;
+}
+blockquote {
+  margin: 8pt 0;
+  padding: 6pt 10pt;
+  border-left: 2.5pt solid #2A9D8F;
+  background: #f3f8f6;
+  color: #435158;
+}
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 8pt 0 12pt 0;
+  font-size: 8.3pt;
+  page-break-inside: avoid;
+}
+th, td {
+  border: 0.5pt solid #cfc8ba;
+  padding: 4pt 5pt;
+  vertical-align: top;
+  text-align: left;
+}
+th { background: #f0ece1; font-weight: 600; }
+ul, ol { margin: 3pt 0 8pt 0; padding-left: 18pt; }
+li { margin-bottom: 2.5pt; }
+img {
+  max-width: 100%;
+  display: block;
+  margin: 10pt auto 3pt auto;
+  page-break-inside: avoid;
+}
+figure { margin: 0; }
+figcaption { font-size: 8.5pt; color: #4d5a60; }
+.small { font-size: 8.5pt; color: #4d5a60; }
+</style>
+</head>
+<body>
+<h1>mutatedSequence: a genome-first, allele-aware tool for reconstructing full-length mutated transcripts, CDS, and proteins from VCF data</h1>
+<p class="small"><strong>Preprint draft for bioRxiv — not yet submitted</strong></p>
+<p><strong>Authors:</strong> [Author 1]<sup>1</sup>, [Author 2]<sup>1</sup>, [Author 3]<sup>2</sup></p>
+<p><strong>Affiliations:</strong><br />
+<sup>1</sup> [Department, Institution, City, Postcode, Country]<br />
+<sup>2</sup> [Department, Institution, City, Postcode, Country]</p>
+<p><strong>Corresponding author:</strong> [Name, email address]</p>
+<p><strong>Keywords:</strong> variant effect prediction; transcript reconstruction; personalized proteome; VCF; structural variation; stop-loss; bioinformatics</p>
+<hr />
+<h2>Abstract</h2>
+<p><strong>Motivation.</strong> Whole-genome and whole-exome sequencing now produce large catalogues of somatic and germline variants. Many downstream analyses—protein structure prediction, neoantigen discovery, proteogenomics, and functional interpretation—require the actual sample-specific transcript, coding DNA, and protein sequences rather than a list of genomic coordinates. Existing annotators report consequences but often not complete mutated sequences; consensus tools are unaware of exon structure, strand, or allele choice.</p>
+<p><strong>Results.</strong> We present mutatedSequence, a dependency-free Python tool that reconstructs reference and mutated cDNA, CDS, and protein sequences for every selected transcript from a genome FASTA, a GTF/GFF3 annotation, and a single-sample VCF. Its genome-first block model applies variants once in genomic coordinates, then extracts exons and CDS segments by interval intersection. This makes exon-junction variants, negative-strand genes, 5′-partial models, split stop codons, multiallelic genotypes, and common symbolic deletions, insertions, duplications, and inversions explicit rather than accidental. The tool reports reference mismatches, unresolved alleles, overlapping edits, and stop-loss readthrough instead of silently emitting a plausible wrong sequence. On Ensembl release 109 chromosome 21, all 1,050 CDS nucleotide sequences were reconstructed exactly; 952 of 1,050 annotated proteins matched exactly, with the remaining 98 differences confined to partial 3′ models. Ten end-to-end scenario tests cover the variant classes above. Outputs include per-variant and per-transcript TSVs, FASTA files, a normalized VCF, and diagnostics.</p>
+<p><strong>Availability.</strong> mutatedSequence is publicly available at https://github.com/wenyuhaokikika/mutatedSequence and is distributed as an environment-only Docker image (<code>wenyuhaobuemoji/mutatedsequence</code>). The code uses only the Python standard library at runtime.</p>
+<hr />
+<h2>Introduction</h2>
+<p>Whole-genome sequencing (WGS) and whole-exome sequencing (WES) have made it routine to call millions of germline variants and thousands of somatic variants from a single sample. The resulting Variant Call Format (VCF) records describe changes in genomic coordinates: a reference allele, one or more alternate alleles, and a genotype [12]. This representation is well suited to storage and consortium-scale sharing, and individual variants are conventionally described with HGVS nomenclature [11], but it is not the representation required by many biological analyses. Protein structure prediction, including AlphaFold3, RoseTTAFold, and protein language models such as ESM, consumes an amino-acid sequence [8–10]. Neoantigen prediction consumes mutated peptides. Proteogenomic search engines consume sample-specific protein FASTA files. In each case, the VCF must first be converted into a transcript- and protein-level sequence.</p>
+<p>The obvious approach is to apply the VCF to the reference genome and then translate the affected transcript. This is more subtle than it first appears. A gene may be on the negative strand, so the alternate allele must be applied on the forward genome and the resulting transcript must be reverse-complemented as a whole. An exon may be split across a variant, so the variant's REF allele can include an intron that is absent from a per-exon FASTA. The annotated CDS often excludes the stop codon, and some transcripts have incomplete 5′ or 3′ ends. A multiallelic record may contain two different alternate alleles, and a genotype may be phased or unphased. Overlapping variants may be on the same or different haplotypes. Common structural variants are represented symbolically rather than as explicit REF/ALT strings. Each of these cases can turn a superficially reasonable translation into a wrong one.</p>
+<p>A number of tools address parts of this problem. Ensembl VEP and SnpEff annotate variants with genes, transcripts, and predicted consequences [2,3]; they are not primarily designed to emit complete mutated cDNA, CDS, and protein sequences. BCFtools <code>csq</code> performs haplotype-aware consequence prediction but likewise reports consequences rather than full-length sequences [4]. Haplosaurus computes protein haplotypes from phased variation [5], and VCF2Prot generates personalized proteomes from consequence-called VCF files [6]; both are valuable, but they assume a particular input representation and do not focus on the full set of transcript-level edge cases considered here. ORFan provides a fast Rust implementation for mutated transcripts and peptides from coding variants [7]. These tools are complementary rather than interchangeable, and a head-to-head benchmark is outside the scope of this work.</p>
+<p>We developed mutatedSequence to make the conversion reproducible and auditable, with explicit handling of the cases that most often cause silent errors. The tool takes a reference genome, an Ensembl-style GTF/GFF3 annotation, and a VCF for one sample. It returns, for each selected transcript, the reference and mutated cDNA, CDS, annotated protein, and a 3′-extended protein for stop-loss/readthrough analysis. It also returns a normalized VCF, per-variant and per-transcript tables, and diagnostics that explain reference mismatches and non-stop transcripts.</p>
+<p>The contributions are:</p>
+<ol>
+<li>A <strong>genome-first block model</strong> that applies each variant once in genomic coordinates and extracts transcript sequence by interval intersection, making exon-junction and negative-strand variants ordinary cases rather than special cases.</li>
+<li><strong>Explicit allele and overlap semantics</strong>: alternate-allele selection, genotype-aware modes, haplotype-specific modes, and a documented policy for conflicting edits.</li>
+<li><strong>Reference reconstruction and auditing</strong> for 5′-partial models, CDS stop codons, split stop codons, and optional Ensembl cDNA/CDS/protein FASTA checks.</li>
+<li><strong>A separate 3′-extended protein</strong> that models stop-codon loss and readthrough without pretending that the annotated stop is still present.</li>
+<li><strong>Auditable outputs</strong> (TSV, FASTA, normalized VCF, diagnostics) and a runtime with no third-party Python dependencies.</li>
+</ol>
+<hr />
+<h2>Results</h2>
+<h3>Overview of the workflow</h3>
+<p>mutatedSequence is organized as a linear, inspectable pipeline (Figure 1). The three required inputs are a genome FASTA, a GTF/GFF3 annotation, and a single-sample VCF. The annotation is parsed into transcript models containing exons, CDS segments, stop-codon features, and UTRs. The reference cDNA, CDS, and protein are reconstructed first, and can be checked against optional Ensembl cDNA, CDS, or peptide FASTA files. Variants are then filtered, assigned to a sample, and converted into genomic edits according to the selected allele mode. The edits are applied to reference/alternate blocks in genomic coordinates. Finally, each transcript is extracted from the edited genome, reverse-complemented when necessary, translated, and written to the output tables and FASTA files.</p>
+<p>The block representation is the key implementation choice. The genome is divided into reference blocks at every edit boundary. Each reference block is either retained or replaced by the corresponding alternate block; insertions become explicit blocks between reference blocks. Because the edit is represented in genomic coordinates, a deletion that begins in one exon and ends in the next is applied before exon extraction. The exon junction is therefore reconstructed from the edited genome, not from a pre-computed per-exon sequence. Negative-strand transcripts use the same forward-strand edit and are reverse-complemented only at extraction time.</p>
+<h3>Reference reconstruction on Ensembl release 109</h3>
+<p>We evaluated reference reconstruction on all 1,050 CDS transcripts on chromosome 21 from Ensembl release 109 [1] (GRCh38). The reconstructed CDS nucleotide sequence matched the Ensembl <code>cds.all.fa</code> record exactly for <strong>1,050 of 1,050 transcripts</strong> (100%). The translated annotated protein matched the Ensembl <code>pep.all.fa</code> record exactly for <strong>952 of 1,050 transcripts</strong> (90.7%). The 98 differences were all in 3′-incomplete models: 91 were classified as <code>partial_3</code> and 7 as <code>partial_5_3</code>. In these models, the Ensembl peptide ends with a partial-codon convention that differs from the reconstructed translation; the underlying CDS nucleotides are identical. This is a property of the annotation, not a reconstruction failure.</p>
+<p>The distribution of CDS length differences explains the apparent 0–5 bp discrepancies that users often observe when comparing a raw GTF CDS with Ensembl FASTA (Figure 2B). The most common difference is +3 bp (831 transcripts), corresponding to the stop codon that is present in the Ensembl CDS FASTA but absent from the GTF CDS feature. Differences of +1 and +2 bp (8 and 6 transcripts) correspond to 5′ partial models that require one or two N bases to preserve the reading frame. Differences of +4 and +5 bp (29 and 40 transcripts) combine a 5′ N pad with the 3′ stop codon. The tool reconstructs these cases explicitly and reports the 5′ N count and stop status rather than hiding them in a length difference.</p>
+<h3>Variant scenario tests</h3>
+<p>The repository contains ten end-to-end tests built on a synthetic genome, annotation, VCF, and reference FASTA set. The tests assert both sequence-level and table-level behavior for:</p>
+<ul>
+<li>reference cDNA, CDS, and protein reconstruction;</li>
+<li>single-nucleotide and multi-nucleotide substitutions;</li>
+<li>frameshifts and in-frame insertions/deletions;</li>
+<li>negative-strand alleles;</li>
+<li>5′-partial models and split stop codons;</li>
+<li>multiallelic and phased genotypes;</li>
+<li>symbolic <code>&lt;DEL&gt;</code>, <code>&lt;INS&gt;</code>, <code>&lt;DUP&gt;</code>, and <code>&lt;INV&gt;</code> alleles;</li>
+<li>REF mismatch, overlapping variants, and genotype edge cases;</li>
+<li>diagnostic output for raw CDS offsets;</li>
+<li>existence and schema of all output files.</li>
+</ul>
+<p>All ten tests pass in the repository and in the Docker environment. The included demo VCF contains 40 records: 38 are selected, 35 are applied, two have a REF mismatch, two are unresolved, one overlapping edit is skipped, and seven are symbolic. The six demo transcripts all match the supplied reference cDNA, CDS, and protein before mutation, and the run summary reports two stop-lost transcripts and four stop-gained transcripts. These tests are designed to exercise the implementation, not to estimate accuracy on a clinical or population cohort; an independent variant-level truth set remains future work.</p>
+<h3>A stop codon cannot be assumed</h3>
+<p>The annotation audit across 121,766 Ensembl release 109 CDS records shows why a naive “translate until the first stop” strategy is insufficient. Of these records, 99,812 (82.0%) end with a terminal TAA, TAG, or TGA, while 21,954 (18.0%) do not (Figure 2C). Among the no-terminal-stop records, 18,559 carry the <code>mRNA_end_NF</code> tag, indicating a 3′-incomplete model whose stop lies outside the known transcript. Separately, 758 of the 99,812 records end with a stop triplet but have a CDS length not divisible by three, so the triplet is not in frame. The strict no-in-frame-stop set is therefore 22,712 records (21,954 + 758).</p>
+<p>This matters for two reasons. First, a reference protein that lacks a terminal stop is not necessarily a failed reconstruction; it may be a partial model, an immune segment, or a non-stop-decay transcript. Second, a mutation that removes the annotated stop can cause translation to continue into the 3′ UTR. The tool separates the two situations. The canonical annotated protein is translated from the reconstructed CDS. A second, 3′-extended protein is translated from the CDS plus a spliced 3′ UTR extension, up to a default of 5 kb. If an in-frame stop is found, the extended protein ends there and <code>protein_stop_ext_alt</code> is true. If no stop is found, translation ends at the boundary of the available sequence and the transcript is flagged with <code>stop_lost=true</code>; no artificial stop is appended (Figure 3). The default does not translate an entire chromosome. <code>--extend-mode utr+genomic</code> or <code>genomic</code> can extend beyond the annotated transcript, and <code>--extend-mode none</code> stops at the CDS end.</p>
+<h3>Auditable outputs</h3>
+<p>For each variant–transcript pair, <code>mutation_report.tsv</code> records the original REF and ALT, the selected allele, the genotype, the consequence, and the reference/mutated cDNA, CDS, and protein sequences. <code>transcripts.tsv</code> adds transcript-level aggregates: reference class, stop-reason, sequence lengths, stop status, stop-loss/stop-gain flags, frameshift status, and whether the reconstructed reference matches the optional Ensembl FASTA. <code>variants.tsv</code> records why each VCF record was applied, skipped, unresolved, or flagged as a REF mismatch. <code>normalized.vcf</code> contains explicit REF/ALT alleles for SNVs, indels, and the supported symbolic classes; <code>run_summary.json</code> and <code>diagnostics.txt</code> summarize the run.</p>
+<p>This structure is intended for review, not only for downstream consumption. A user can inspect a specific variant, see which allele was selected, compare the reference and alternate sequences, and determine whether a missing stop is annotated, mutation-induced, or simply outside the extension window.</p>
+<h3>Scope and portability</h3>
+<p>The runtime uses only the Python standard library. It does not require BCFtools, samtools, pysam, or a compiled C extension. The repository provides a command-line interface, a test dataset, and an environment-only Docker image in which the code is bind-mounted at <code>/workspace</code>; the image contains no copy of the tool source. This design keeps the execution environment reproducible while allowing the code to be inspected and versioned independently.</p>
+<hr />
+<h2>Discussion</h2>
+<p>mutatedSequence addresses a narrow but recurring problem: converting a VCF into full-length transcript and protein sequences in a way that is transparent about the choices made. The genome-first block model is not a new algorithm in the sense of a novel data structure; its value is that it makes the correct unit of application explicit. Once variants are applied to the genome, exon junctions, negative-strand genes, and overlapping transcript models are handled by the same extraction code. The alternative—applying variants separately to each exon or transcript—requires reimplementing edge-case logic for every transcript and is difficult to audit.</p>
+<p>The tool is deliberately conservative. It does not infer a new splice isoform from a splice-site variant, it does not phase unphased genotypes, and it does not pretend that a symbolic translocation can be represented as one linear transcript. When an input cannot be represented, the tool reports <code>unresolved</code>, <code>overlap_skipped</code>, or a reference mismatch rather than emitting a plausible sequence. This is a design choice: for downstream structure prediction or neoantigen analysis, a silently wrong sequence can be worse than a missing one. The <code>--strict</code> option makes REF mismatches fatal for pipelines that prefer to stop rather than skip.</p>
+<p>The validation reported here has clear limits. The chromosome 21 analysis establishes that reference reconstruction agrees with Ensembl at the nucleotide level for all 1,050 CDS transcripts, and explains the 98 protein-level differences in partial models. The ten scenario tests establish that the implementation handles the intended edge cases. Neither is a population-scale accuracy estimate, and we did not perform a head-to-head comparison with VEP, Haplosaurus, VCF2Prot, or ORFan. Such a comparison would need a shared truth set with phased haplotypes, simulated structural variants, and independent sequence verification. We also did not evaluate the effect of alternative splice isoforms, because the current model uses a fixed annotation.</p>
+<p>Several limitations follow directly from the model. Unphased compound variants produce a mosaic consensus, not two haplotypes; users who need allele-specific protein sequences should phase the VCF and run the <code>hap1</code> and <code>hap2</code> modes separately. Splice-site variants are annotated but do not change the exon structure, so exon skipping, cryptic splicing, and intron retention require an alternative transcript model or a splice-aware tool. <code>&lt;TRA&gt;</code>, <code>&lt;BND&gt;</code>, and <code>&lt;CNV&gt;</code> are outside the single-linear-transcript model. Mitochondrial genetic codes, selenocysteine recoding, and programmed ribosomal frameshifting are not modeled. Nonsense-mediated decay is flagged through the reference class but not simulated. Finally, the output is a sequence-level hypothesis: it should be validated against RNA-seq, proteomics, or targeted assays when the biological conclusion depends on the exact protein.</p>
+<p>These limitations suggest several extensions: haplotype-aware processing with phase blocks, integration of splice prediction, a pangenome or graph reference for complex structural variation, and direct export of mutated sequences to protein structure and neoantigen pipelines. The current implementation is intentionally small enough to be embedded in those workflows, and its outputs are designed to make the assumptions visible. mutatedSequence is a research tool; it is not a clinical variant interpreter and does not provide a diagnosis.</p>
+<hr />
+<h2>Methods</h2>
+<h3>Inputs and preprocessing</h3>
+<p>The required inputs are a genome FASTA, a GTF/GFF3 annotation, and a VCF. The VCF is parsed for CHROM, POS, REF, ALT, FILTER, QUAL, and the selected sample's GT. Records can be filtered by quality, FILTER value, genotype missingness, and hom-reference status. Chromosome names are matched after configurable alias normalization (for example, <code>1</code> and <code>chr1</code>). The genome can be uncompressed with an <code>.fai</code> index or gzip-compressed; the uncompressed path is recommended for large genomes because gzip access requires loading the compressed file into memory.</p>
+<p>The annotation parser recognizes transcript, exon, CDS, stop_codon, and UTR features. Transcripts are grouped by transcript ID, and exons and CDS segments are ordered according to the transcript strand. When explicit UTR features are absent, 3′ UTR segments are derived from the terminal exon and CDS coordinates. Transcript tags such as <code>mRNA_start_NF</code>, <code>mRNA_end_NF</code>, <code>cds_start_NF</code>, and <code>cds_end_NF</code> are retained for reference classification.</p>
+<h3>Reference reconstruction</h3>
+<p>For each transcript, the reference cDNA is the concatenation of exon sequences in transcript orientation. The reference CDS is the concatenation of CDS segments, plus the stop codon when it is annotated separately, plus a 5′ N pad when the model is 5′-partial. The N pad is determined from the CDS phase and the partial-model tags; it preserves the reading frame without inventing a biological base. If an optional Ensembl cDNA, CDS, or peptide FASTA is supplied, the reconstructed sequence is compared with the corresponding record and the result is written to the output tables.</p>
+<p>The reference protein is translated from the reconstructed CDS using the standard genetic code. Translation stops at the first in-frame stop codon by default. A separate extended CDS appends the spliced 3′ UTR and, optionally, a genomic extension; the extended protein is translated from this longer sequence. The reference class is assigned from the partial-model tags and the observed stop status: <code>complete</code>, <code>partial_5_complete_3</code>, <code>partial_5</code>, <code>partial_3_with_stop</code>, <code>partial_3</code>, <code>partial_5_3</code>, <code>non_stop_decay</code>, <code>immune_segment</code>, <code>nmd_partial</code>, or <code>no_stop_other</code>.</p>
+<h3>Variant selection</h3>
+<p>Each VCF record is converted to a <code>ChosenAllele</code> according to the allele mode. In <code>alt</code> mode, the requested alternate allele is used; for a biallelic record the single alternate is used regardless of the requested index. In <code>genotype</code> mode, the first non-reference allele in the GT is used. In <code>hom</code> mode, the record is used only when both GT alleles are the same non-reference allele. In <code>hap1</code> and <code>hap2</code> modes, the corresponding GT allele is used; a homozygous genotype therefore contributes the same allele to both haplotypes, while a heterozygous genotype contributes one alternate allele to one haplotype and the reference to the other. Missing genotypes, hom-reference records, and out-of-range alternate indices are reported and skipped according to the selected flags.</p>
+<p>The REF allele is checked against the forward-strand genome at <code>POS-1 : POS-1+len(REF)</code>. For multi-base REF alleles, the tool also searches a small window for the REF and reports the offset and strand. A mismatch is a warning by default and a fatal error under <code>--strict</code>; in either case the variant is not applied to the sequence. This check catches the most common causes of wrong output: an assembly mismatch, a transcript-based VCF, a different contig naming convention, or an indel anchor-base error.</p>
+<h3>Genomic edits and the block model</h3>
+<p>An explicit SNV, MNV, or indel becomes a <code>reference</code> interval and an <code>alternate</code> string. For a symbolic <code>&lt;DEL&gt;</code>, the interval is taken from END or SVLEN; for <code>&lt;INS&gt;</code>, the inserted sequence is taken from the symbolic record or its sequence-resolved representation; <code>&lt;DUP&gt;</code> and <code>&lt;INV&gt;</code> are converted to explicit edits when the interval is known. <code>&lt;TRA&gt;</code>, <code>&lt;BND&gt;</code>, and <code>&lt;CNV&gt;</code> remain unresolved because they cannot be represented as a single linear transcript.</p>
+<p>Edits are sorted by genomic position. If two accepted edits overlap, the later edit is skipped by default and recorded as <code>overlap_skipped</code>; the <code>--overlap error</code> policy aborts instead. The genome is then divided into reference blocks at all edit boundaries. Each block is retained, replaced, or supplemented by an insertion block. The resulting alternate sequence is a chain of reference and alternate blocks, and can be queried by any interval in genomic coordinates.</p>
+<h3>Transcript extraction and translation</h3>
+<p>For each transcript, exons are intersected with the alternate block chain and concatenated in transcript orientation. The same operation is applied to CDS segments and the separately annotated stop codon. If the transcript is on the negative strand, the extracted sequence is reverse-complemented as a whole; the VCF allele itself is never reverse-complemented. This is the step that makes negative-strand variants and exon-junction variants use the same code path.</p>
+<p>The mutated CDS is translated with the standard code. The annotated protein stops at the first in-frame stop, or at the end of the CDS if no stop is present. The extended CDS adds the spliced 3′ UTR (default up to 5,000 bp) and optionally a genomic extension; the extended protein is translated separately. A transcript is marked <code>stop_lost</code> when the reference annotated protein has a stop and the alternate extended protein does not. A transcript is marked <code>stop_gained</code> when the alternate CDS has a stop that the reference does not.</p>
+<h3>Effect annotation and outputs</h3>
+<p>For each variant–transcript pair, the tool identifies the first differing codon and classifies the consequence as synonymous, missense, nonsense, start-lost, stop-lost, frameshift, in-frame insertion/deletion, splice-site, intronic, UTR, or non-coding. Per-variant effects are computed with only that variant applied; transcript-level aggregates use all accepted variants for the transcript. The output directory contains:</p>
+<ul>
+<li><code>mutation_report.tsv</code> — per-variant, per-transcript sequences and effects;</li>
+<li><code>transcripts.tsv</code> — one row per transcript with aggregate effects and reference checks;</li>
+<li><code>variants.tsv</code> — one row per VCF record with application status and skip reason;</li>
+<li><code>normalized.vcf</code> — explicit REF/ALT alleles for supported variants;</li>
+<li><code>sequences/</code> — FASTA files for cDNA, CDS, annotated protein, and extended protein;</li>
+<li><code>run_summary.json</code> and <code>diagnostics.txt</code> — run-level counts and explanations.</li>
+</ul>
+<p>The TSV schema includes <code>ref_match</code>, <code>genome_ref</code>, <code>ref_offset</code>, <code>genome_context</code>, <code>reference_class</code>, <code>reference_stop_reason</code>, <code>protein_stop_alt</code>, <code>protein_stop_ext_alt</code>, <code>stop_lost</code>, <code>stop_gained</code>, <code>start_lost</code>, <code>frameshift</code>, and <code>overlap_skipped</code>.</p>
+<h3>Validation datasets and software</h3>
+<p>Reference reconstruction was evaluated against Ensembl release 109 GRCh38 chromosome 21: 1,050 CDS transcripts from the GTF, <code>Homo_sapiens.GRCh38.cds.all.fa.gz</code>, and <code>Homo_sapiens.GRCh38.pep.all.fa.gz</code>. The genome-wide annotation audit used all 121,766 CDS records in the release 109 <code>cds.all.fa.gz</code>. The scenario tests use a synthetic genome and annotation designed to exercise each variant class; the demo VCF and expected reference sequences are included in the repository. All analyses used public reference data; no human participants or animal experiments were involved.</p>
+<p>mutatedSequence version 2.0.0 requires Python 3.8 or later and has no third-party runtime dependencies. The command-line entry point is <code>mutatedseq</code>; the repository also provides a thin <code>./mutatedSequence</code> launcher. The Docker image contains the runtime environment only; the source is mounted at <code>/workspace</code> at run time.</p>
+<hr />
+<h2>Data and code availability</h2>
+<p>The source code, test data, documentation (English and Chinese), and Docker instructions are available at https://github.com/wenyuhaokikika/mutatedSequence. The environment-only Docker image is available as <code>wenyuhaobuemoji/mutatedsequence:2.0.0</code> and <code>:latest</code> on Docker Hub. The manuscript figures are generated by <code>paper/make_figures.py</code>; the underlying counts are in the repository README and in <code>examples/demo_out/run_summary.json</code>.</p>
+<h2>Competing interests</h2>
+<p>The authors declare no competing interests.</p>
+<h2>Author contributions</h2>
+<p>[To be completed: conceptualization, software, validation, writing—original draft, writing—review and editing.]</p>
+<h2>Acknowledgements</h2>
+<p>[To be completed.]</p>
+<h2>References</h2>
+<ol>
+<li>Cunningham F, Allen JE, Allen J, et al. Ensembl 2023. <em>Nucleic Acids Research</em>. 2023;51(D1):D933–D941. doi:10.1093/nar/gkac958.</li>
+<li>McLaren W, Gil L, Hunt SE, et al. The Ensembl Variant Effect Predictor. <em>Genome Biology</em>. 2016;17:122. doi:10.1186/s13059-016-0974-4.</li>
+<li>Cingolani P, Platts A, Wang le L, et al. A program for annotating and predicting the effects of single nucleotide polymorphisms, SnpEff. <em>Fly (Austin)</em>. 2012;6(2):80–92. doi:10.4161/fly.19695.</li>
+<li>Danecek P, Bonfield JK, Liddle J, et al. Twelve years of SAMtools and BCFtools. <em>GigaScience</em>. 2021;10(2):giab008. doi:10.1093/gigascience/giab008.</li>
+<li>Spooner W, McLaren W, Slidel T, et al. Haplosaurus computes protein haplotypes for use in precision drug design. <em>Nature Communications</em>. 2018;9:4128. doi:10.1038/s41467-018-06542-1.</li>
+<li>ElAbd H, Degenhardt F, Lenz TL, Franke A, Wendorff M. VCF2Prot: an efficient and parallel tool for generating personalized proteomes from VCF files. <em>bioRxiv</em>. 2022. doi:10.1101/2022.01.21.477084.</li>
+<li>ngs-ai-org. ORFan: open reading frame analysis toolkit. GitHub. https://github.com/ngs-ai-org/orfan. Accessed 24 October 2026.</li>
+<li>Abramson J, Adler J, Dunger J, et al. Accurate structure prediction of biomolecular interactions with AlphaFold 3. <em>Nature</em>. 2024;630:493–500. doi:10.1038/s41586-024-07487-w.</li>
+<li>Baek M, DiMaio F, Anishchenko I, et al. Accurate prediction of protein structures and interactions using a three-track neural network. <em>Science</em>. 2021;373:871–876. doi:10.1126/science.abj8754.</li>
+<li>Lin Z, Akin H, Rao R, et al. Evolutionary-scale prediction of atomic-level protein structure with a language model. <em>Science</em>. 2023;379:1123–1130. doi:10.1126/science.ade2574.</li>
+<li>den Dunnen JT, Dalgleish R, Maglott DR, et al. HGVS recommendations for the description of sequence variants: 2016 update. <em>Human Mutation</em>. 2016;37(6):564–569. doi:10.1002/humu.22981.</li>
+<li>Danecek P, Auton A, Abecasis G, et al. The variant call format and VCFtools. <em>Bioinformatics</em>. 2011;27(15):2156–2158. doi:10.1093/bioinformatics/btr330.</li>
+</ol>
+<hr />
+<h2>Figure legends</h2>
+<p><img alt="Figure 1" src="figures/figure1_workflow.png" /></p>
+<p><strong>Figure 1. Genome-first workflow of mutatedSequence.</strong> The three required inputs are a genome FASTA, a GTF/GFF3 annotation, and a single-sample VCF. Reference transcript models are reconstructed and optionally checked against Ensembl FASTA files. Variants are selected and converted into explicit genomic edits; edits are applied to reference/alternate blocks in genomic coordinates; exons and CDS segments are then extracted by interval intersection. Negative-strand transcripts are reverse-complemented as a whole at extraction. The final outputs are mutated cDNA, CDS, annotated protein, 3′-extended protein, and audit tables. The right panels list cases handled explicitly and conditions that are reported rather than hidden.</p>
+<p><img alt="Figure 2" src="figures/figure2_validation.png" /></p>
+<p><strong>Figure 2. Reference reconstruction and annotation audit.</strong> (A) Exact matches between reconstructed sequences and Ensembl release 109 chromosome 21 records for 1,050 CDS transcripts: CDS nucleotide sequence, 1,050/1,050 (100%); annotated protein, 952/1,050 (90.7%). The 98 protein differences are confined to partial 3′ models; the underlying CDS nucleotides are identical. (B) Distribution of the difference between the Ensembl CDS length and the raw GTF CDS length. The +3 bp mode is the stop codon added to the CDS; +1 and +2 bp modes are 5′ partial-model N pads; +4 and +5 bp combine both. (C) Terminal-stop status across 121,766 Ensembl release 109 CDS records. Of the 21,954 records without a terminal stop, 18,559 carry <code>mRNA_end_NF</code>, indicating a 3′-incomplete model.</p>
+<p><img alt="Figure 3" src="figures/figure3_stoploss.png" /></p>
+<p><strong>Figure 3. Stop-codon loss and 3′ readthrough.</strong> In the reference transcript, the ribosome terminates at the annotated stop codon. When a variant changes the stop codon (for example, TAA to CAA), translation continues in the same reading frame into the spliced 3′ UTR. If a downstream in-frame stop is found, the extended protein ends there and <code>protein_stop_ext_alt</code> is true. If no stop is found within the available extension, the transcript is marked <code>stop_lost=true</code> and no artificial stop is appended. The default extension is the spliced 3′ UTR up to 5 kb; <code>--extend-mode utr+genomic</code> or <code>genomic</code> extends further, and <code>none</code> stops at the annotated CDS end.</p>
+<hr />
+<h2>Tables</h2>
+<p><strong>Table 1. Relationship to existing tools.</strong> The comparison describes typical primary outputs and input assumptions; it is not a performance ranking.</p>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Primary output</th>
+<th>Typical input</th>
+<th>Relationship to this work</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ensembl VEP / SnpEff</td>
+<td>Variant consequences, genes, transcripts, HGVS</td>
+<td>VCF + annotation</td>
+<td>Excellent annotation breadth; not primarily a full-length sequence emitter</td>
+</tr>
+<tr>
+<td>BCFtools <code>csq</code></td>
+<td>Haplotype-aware consequences</td>
+<td>VCF + GFF + reference</td>
+<td>Fast and established; reports consequences rather than complete cDNA/CDS/protein</td>
+</tr>
+<tr>
+<td>Haplosaurus</td>
+<td>Protein haplotypes</td>
+<td>Phased variants + transcript models</td>
+<td>Strong for phased protein haplotypes; requires phasing and focuses on CDS/protein</td>
+</tr>
+<tr>
+<td>VCF2Prot</td>
+<td>Personalized proteome FASTA</td>
+<td>Consequence-called VCF + reference proteome</td>
+<td>Efficient proteome generation; not a transcript-level cDNA/CDS audit tool</td>
+</tr>
+<tr>
+<td>ORFan</td>
+<td>Mutated transcripts and peptides</td>
+<td>VCF + GTF + genome</td>
+<td>Fast Rust implementation for coding variants; no peer-reviewed paper identified at the time of writing</td>
+</tr>
+<tr>
+<td>mutatedSequence</td>
+<td>Full cDNA, CDS, annotated and extended protein + audit TSV</td>
+<td>VCF + GTF/GFF3 + genome</td>
+<td>Explicit transcript-level edge cases, allele/overlap policy, and reference diagnostics</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Table 2. Scenario coverage in the end-to-end test set.</strong> Each row is implemented as an assertion in <code>tests/test_pipeline.py</code>; the table summarizes the intended behavior, not an external accuracy estimate.</p>
+<table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th>Asserted behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Reference reconstruction</td>
+<td>cDNA, CDS, and protein match the supplied reference records</td>
+</tr>
+<tr>
+<td>SNV / MNV</td>
+<td>Correct codon change and consequence</td>
+</tr>
+<tr>
+<td>Frameshift / in-frame indel</td>
+<td>Correct CDS length, protein effect, and frameshift flag</td>
+</tr>
+<tr>
+<td>Negative strand</td>
+<td>ALT applied on the forward genome; transcript reverse-complemented</td>
+</tr>
+<tr>
+<td>5′ partial and split stop</td>
+<td>N pad preserves frame; split stop codon is reconstructed</td>
+</tr>
+<tr>
+<td>Multiallelic / phased</td>
+<td>Selected allele is explicit; hap1/hap2 differ correctly</td>
+</tr>
+<tr>
+<td>Symbolic DEL/INS/DUP/INV</td>
+<td>Resolved to explicit edits where possible; unresolved cases reported</td>
+</tr>
+<tr>
+<td>REF mismatch / overlap / GT edge cases</td>
+<td>Warning or <code>--strict</code> abort; overlap policy and skip reasons recorded</td>
+</tr>
+<tr>
+<td>Diagnostics</td>
+<td>Raw CDS offset and leading-N explanations are emitted</td>
+</tr>
+<tr>
+<td>Output schema</td>
+<td>All expected tables and FASTA files exist and are parseable</td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

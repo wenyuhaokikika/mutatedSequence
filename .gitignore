@@ -11,3 +11,7 @@ tests/tmp_out*/
 tests/out*/
 *.fai
 *.log
+
+# local TTS environment and manuscript preview pages
+workplace_ttsenv/
+paper/page*.png

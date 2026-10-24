@@ -137,9 +137,10 @@ Core properties:
 
 ## Explainer video
 
-A 7-minute 26-second, 1080p/30 fps Remotion explainer lives in [`animation/`](animation/).
-It uses the playful-but-gentle Chinese voice `zh-CN-XiaoyiNeural` (-6% rate,
-+2 Hz pitch) and cuts the 13 scenes to the actual narration durations.
+A 7-minute 14-second, 1080p/30 fps Remotion explainer lives in [`animation/`](animation/).
+It uses the warm Chinese voice `zh-CN-XiaoxiaoNeural` (-2% rate) and cuts the
+13 scenes to the actual narration durations. A local CosyVoice2 option is
+documented in [`animation/TTS_OPTIONS.md`](animation/TTS_OPTIONS.md).
 
 - Direction and shot list: [`animation/STORYBOARD.md`](animation/STORYBOARD.md)
 - Source and render instructions: [`animation/README.md`](animation/README.md)
@@ -148,6 +149,13 @@ It uses the playful-but-gentle Chinese voice `zh-CN-XiaoyiNeural` (-6% rate,
 - The cut covers the WGS→AI gap, the genome-as-recipe analogy, inputs, REF check, allele
   selection, genomic blocks, cDNA/CDS/protein, stop-codon loss, auditable TSV,
   a Docker walkthrough, tool comparison, honest limits and the outro.
+
+## Preprint draft
+
+A bioRxiv-style manuscript draft is in [`paper/`](paper/): editable Markdown,
+PDF and DOCX drafts, 300 dpi figures, a cover letter, and a submission
+checklist. Author names, affiliations, and the licence choice are placeholders
+and must be completed before posting.
 
 ## Install
 

@@ -1,8 +1,8 @@
 # mutatedSequence · Remotion explainer
 
-A **7:26**, 1920×1080 / 30 fps explainer for the VCF → transcript → protein
-pipeline. The narration is Chinese, performed by the playful-but-gentle
-`zh-CN-XiaoyiNeural` voice.
+A **7:14**, 1920×1080 / 30 fps explainer for the VCF → transcript → protein
+pipeline. The narration is Chinese, performed by the warmer, more natural
+`zh-CN-XiaoxiaoNeural` voice.
 
 - **Storyboard / direction:** [STORYBOARD.md](STORYBOARD.md)
 - **Composition:** `src/index.ts` → `Explainer`
@@ -14,43 +14,49 @@ pipeline. The narration is Chinese, performed by the playful-but-gentle
 
 | # | Scene | Time |
 |---:|---|---|
-| 01 | Why — WGS data + AI structures, and the missing bridge | 0:00–0:56 |
-| 02 | Map — genome → transcript → protein, in plain language | 0:56–1:32 |
-| 03 | Three inputs and the outputs | 1:32–2:06 |
-| 04 | Check the address (REF) | 2:06–2:35 |
-| 05 | Two copies, choose one version | 2:35–3:08 |
-| 06 | Edit genomic blocks first | 3:08–3:35 |
-| 07 | cDNA → CDS → protein | 3:35–4:05 |
-| 08 | Stop-codon loss and readthrough | 4:05–4:50 |
-| 09 | Auditable TSV / FASTA | 4:50–5:16 |
-| 10 | Docker in one command | 5:16–5:36 |
-| 11 | Where it fits among VEP/Haplosaurus/VCF2Prot/ORFan | 5:36–6:29 |
-| 12 | Honest limits | 6:29–7:08 |
-| 13 | Outro | 7:08–7:26 |
+| 01 | Why — WGS data + AI structures, and the missing bridge | 0:00–0:54 |
+| 02 | Map — genome → transcript → protein, in plain language | 0:54–1:29 |
+| 03 | Three inputs and the outputs | 1:29–2:04 |
+| 04 | Check the address (REF) | 2:04–2:31 |
+| 05 | Two copies, choose one version | 2:31–3:04 |
+| 06 | Edit genomic blocks first | 3:04–3:31 |
+| 07 | cDNA → CDS → protein | 3:31–3:59 |
+| 08 | Stop-codon loss and readthrough | 3:59–4:41 |
+| 09 | Auditable TSV / FASTA | 4:41–5:07 |
+| 10 | Docker in one command | 5:07–5:26 |
+| 11 | Where it fits among VEP/Haplosaurus/VCF2Prot/ORFan | 5:26–6:17 |
+| 12 | Honest limits | 6:17–6:56 |
+| 13 | Outro | 6:56–7:14 |
 
 ## Voice
 
-`scripts/generate_tts.py` uses:
+`scripts/generate_tts_xiaoxiao.py` uses:
 
 ```text
-voice: zh-CN-XiaoyiNeural
-rate:  -6%
-pitch: +2Hz
+voice: zh-CN-XiaoxiaoNeural
+rate:  -2%
+pitch: +0Hz
 tail:  0.9s per scene
 ```
 
-Xiaoyi is the lively/cartoon female voice in Edge TTS; the slower rate and
-small pitch lift keep it playful and gentle, with room for a non-specialist
-audience. The script calls `ffprobe` to measure each MP3 and writes
-`src/timing.json`, so the edit is cut to the voice rather than to guessed
-durations. The narration is split into 2–5 short caption chunks per scene.
+Xiaoxiao is an adult female voice with much smoother sentence prosody than
+Xiaoyi, which sounded clipped and metronomic in the first cut. The script calls
+`ffprobe` to measure each MP3 and writes `src/timing.json`, so the edit is cut to
+the voice rather than to guessed durations. The narration is split into 2–5
+short caption chunks per scene.
 
-Regenerate the audio (requires `ffmpeg` + `edge-tts`):
+Regenerate the current audio (requires `ffmpeg` + `edge-tts`):
 
 ```bash
 python -m pip install -r requirements-tts.txt
-python scripts/generate_tts.py
+python scripts/generate_tts_xiaoxiao.py
 ```
+
+A local CosyVoice2 backend is also available and produces a more natural,
+less synthetic timbre. It needs a CUDA GPU and the external CosyVoice checkout
+and weights; see [TTS_OPTIONS.md](TTS_OPTIONS.md) and
+`scripts/generate_tts_cosyvoice.py`. The older Xiaoyi backend is retained as
+`scripts/generate_tts.py`.
 
 The generated MP3s live in `public/narration/` and are committed, so a normal
 render does not need network access or TTS credentials.
