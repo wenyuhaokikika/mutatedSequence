@@ -1,0 +1,55 @@
+##fileformat=VCFv4.2
+##source=mutatedSequence-synthetic-test
+##contig=<ID=1,length=8000>
+##contig=<ID=2,length=4000>
+##INFO=<ID=SVTYPE,Number=1,Type=String,Description="SV type">
+##INFO=<ID=END,Number=1,Type=Integer,Description="End position">
+##INFO=<ID=SVLEN,Number=.,Type=Integer,Description="SV length">
+##INFO=<ID=LEFT_SVINSSEQ,Number=1,Type=String,Description="Left insertion sequence">
+##INFO=<ID=RIGHT_SVINSSEQ,Number=1,Type=String,Description="Right insertion sequence">
+##FORMAT=<ID=GT,Number=1,Type=String,Description="Genotype">
+##FORMAT=<ID=GQ,Number=1,Type=Integer,Description="Genotype quality">
+##FORMAT=<ID=DP,Number=1,Type=Integer,Description="Depth">
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT	S1	S2
+1	602	A_start_lost	T	A	50	PASS	.	GT:GQ:DP	1/1:50:30	0/0:50:30
+1	631	A_missense	C	A	50	PASS	.	GT:GQ:DP	0/1:50:30	0/0:50:30
+1	663	A_synonymous	T	C	50	PASS	.	GT:GQ:DP	0/1:50:30	0/0:50:30
+1	688	A_nonsense	A	T	50	PASS	.	GT:GQ:DP	1/1:50:30	0/0:50:30
+1	721	A_frameshift_ins	T	TC	50	PASS	.	GT:GQ:DP	0/1:50:30	0/0:50:30
+1	750	A_inframe_del	ACTG	A	50	PASS	.	GT:GQ:DP	1/1:50:30	0/0:50:30
+1	811	A_mnv	CT	GA	50	PASS	.	GT:GQ:DP	0/1:50:30	0/0:50:30
+1	2300	A_stop_lost	T	C	50	PASS	.	GT:GQ:DP	0/1:50:30	0/0:50:30
+1	1701	A_splice_donor	A	C	50	PASS	.	GT:GQ:DP	0/1:50:30	0/0:50:30
+1	550	A_utr5	A	C	50	PASS	.	GT:GQ:DP	0/1:50:30	0/0:50:30
+1	2400	A_utr3	C	G	50	PASS	.	GT:GQ:DP	1/1:50:30	0/0:50:30
+1	2000	A_intron	C	G	50	PASS	.	GT:GQ:DP	0/1:50:30	0/0:50:30
+1	850	A_del_exon_span	G	<DEL>	50	PASS	SVTYPE=DEL;END=1500;SVLEN=-650	GT:GQ:DP	0/1:50:30	0/0:50:30
+1	780	A_overlap_del	GTAT	G	50	PASS	.	GT:GQ:DP	1/1:50:30	0/0:50:30
+1	782	A_overlap_snv	A	C	50	PASS	.	GT:GQ:DP	1/1:50:30	0/0:50:30
+1	450	A_bad_ref	C	A	50	PASS	.	GT:GQ:DP	0/1:50:30	0/0:50:30
+1	470	A_hom_ref	A	C	50	PASS	.	GT:GQ:DP	0/0:50:30	0/0:50:30
+1	480	A_missing_gt	C	G	50	PASS	.	GT:GQ:DP	./.:50:30	0/0:50:30
+1	490	A_lowqual	T	A	50	LowQual	.	GT:GQ:DP	0/1:50:30	0/0:50:30
+1	4070	B_missense	G	T	50	PASS	.	GT:GQ:DP	1/1:50:30	0/0:50:30
+1	3949	B_frameshift_del	AG	A	50	PASS	.	GT:GQ:DP	0/1:50:30	0/0:50:30
+1	3301	B_splice	C	G	50	PASS	.	GT:GQ:DP	0/1:50:30	0/0:50:30
+1	2950	B_utr3	T	A	50	PASS	.	GT:GQ:DP	1/1:50:30	0/0:50:30
+1	3269	B_symbolic_del	A	<DEL>	50	PASS	SVTYPE=DEL;END=3278;SVLEN=-9	GT:GQ:DP	0/1:50:30	0/0:50:30
+1	3999	B_symbolic_ins	A	<INS>	50	PASS	SVTYPE=INS;END=3999;SVLEN=3;LEFT_SVINSSEQ=GCT	GT:GQ:DP	0/1:50:30	0/0:50:30
+1	5031	C_missense	A	C	50	PASS	.	GT:GQ:DP	0/1:50:30	0/0:50:30
+1	5061	C_frameshift_ins	A	AG	50	PASS	.	GT:GQ:DP	0/1:50:30	0/0:50:30
+1	6088	D_stop_gained	A	T	50	PASS	.	GT:GQ:DP	1/1:50:30	0/0:50:30
+1	6121	D_frameshift_ins	T	TT	50	PASS	.	GT:GQ:DP	0/1:50:30	0/0:50:30
+1	7401	E_stop_lost_split	T	C	50	PASS	.	GT:GQ:DP	0/1:50:30	0/0:50:30
+2	883	G_multiallelic	C	A,T	50	PASS	.	GT:GQ:DP	1/2:50:30	0/1:50:30
+2	886	G_phased	C	A	50	PASS	.	GT:GQ:DP	1|0:50:30	0|1:50:30
+2	601	G_alt_start	A	C	50	PASS	.	GT:GQ:DP	0/1:50:30	0/0:50:30
+2	630	G_symbolic_del	A	<DEL>	50	PASS	SVTYPE=DEL;END=639;SVLEN=-9	GT:GQ:DP	0/1:50:30	0/0:50:30
+2	690	G_symbolic_ins	A	<INS>	50	PASS	SVTYPE=INS;END=690;SVLEN=3;LEFT_SVINSSEQ=GCT	GT:GQ:DP	0/1:50:30	0/0:50:30
+2	750	G_symbolic_dup	A	<DUP>	50	PASS	SVTYPE=DUP;END=780;SVLEN=30	GT:GQ:DP	1/1:50:30	0/0:50:30
+2	810	G_symbolic_inv	A	<INV>	50	PASS	SVTYPE=INV;END=840;SVLEN=30	GT:GQ:DP	0/1:50:30	0/0:50:30
+2	1500	G_explicit_ins	T	TTT	50	PASS	.	GT:GQ:DP	0/1:50:30	0/0:50:30
+2	2000	G_bad_ref	A	A	50	PASS	.	GT:GQ:DP	0/1:50:30	0/0:50:30
+2	2100	G_lowqual	A	C	50	LowQual	.	GT:GQ:DP	0/1:50:30	0/0:50:30
+2	2200	G_homref	G	T	50	PASS	.	GT:GQ:DP	0/0:50:30	0/0:50:30
+2	2300	G_missing_gt	G	T	50	PASS	.	GT:GQ:DP	./.:50:30	0/0:50:30

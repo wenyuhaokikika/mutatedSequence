@@ -1,36 +1,45 @@
+#!/usr/bin/env bash
 ###
- # @Description: download bio sequence from ensembl
- # @version: 
- # @Author: wenyuhao
- # @Date: 2023-05-05 11:15:40
- # @LastEditors: wenyuhao
- # @LastEditTime: 2023-05-05 11:15:40
-### 
+# @Description: download Ensembl reference files used by mutatedSequence.
+# Usage: ./downLoad.sh 109
+#
+# For a human genome, the pipeline can read the gzipped FASTA directly but
+# will load it into memory.  For low-memory random access, decompress the
+# genome and index it:
+#   gunzip -c resource/Homo_sapiens.GRCh38.dna.toplevel.fa.gz \
+#       > resource/Homo_sapiens.GRCh38.dna.toplevel.fa
+#   samtools faidx resource/Homo_sapiens.GRCh38.dna.toplevel.fa
+###
+set -euo pipefail
+filepath=$(cd "$(dirname "$0")" && pwd)
+source "$filepath/log.sh"
 
-source ./log.sh; #https://github.com/Zordrak/bashlog
-check_status () {
-    if [ $? -ne 0 ]; then
-        log error "Error: download ERROR."
-        exit 1
-    else
-        log info "download successfully."
-    fi
+release=${1:-109}
+base=${ENSEMBL_FTP:-https://ftp.ensembl.org/pub}/release-"$release"
+outdir=${2:-"$filepath/resource"}
+mkdir -p "$outdir"
+
+download() {
+  local url=$1
+  local dest=$2
+  log info "download $url"
+  wget -c "$url" -O "$dest"
+  if [ $? -ne 0 ]; then
+    log error "download failed: $url"
+    exit 1
+  fi
 }
-release=$1
-mkidr resource
-log info 'download cdna ...'
-wget https://ftp.ensembl.org/pub/release-"$release"/fasta/homo_sapiens/cdna/Homo_sapiens.GRCh38.cdna.all.fa.gz -P ./resource
-check_status
-log info 'download cds ...'
-wget https://ftp.ensembl.org/pub/release-"$release"/fasta/homo_sapiens/cds/Homo_sapiens.GRCh38.cds.all.fa.gz -P ./resource
-check_status 
-log info 'download proteins ...'
-wget https://ftp.ensembl.org/pub/release-"$release"/fasta/homo_sapiens/pep/Homo_sapiens.GRCh38.pep.all.fa.gz -P ./resource
-check_status
-log info 'download gtf ...'
-wget https://ftp.ensembl.org/pub/release-"$release"/gtf/homo_sapiens/Homo_sapiens.GRCh38."$release".chr_patch_hapl_scaff.gtf.gz -P ./resource
-check_status 
-log info 'download dna ...'
-wget https://ftp.ensembl.org/pub/release-"$release"/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.toplevel.fa.gz -P ./resource
-check_status
 
+download "$base/fasta/homo_sapiens/cdna/Homo_sapiens.GRCh38.cdna.all.fa.gz" \
+  "$outdir/Homo_sapiens.GRCh38.cdna.all.fa.gz"
+download "$base/fasta/homo_sapiens/cds/Homo_sapiens.GRCh38.cds.all.fa.gz" \
+  "$outdir/Homo_sapiens.GRCh38.cds.all.fa.gz"
+download "$base/fasta/homo_sapiens/pep/Homo_sapiens.GRCh38.pep.all.fa.gz" \
+  "$outdir/Homo_sapiens.GRCh38.pep.all.fa.gz"
+download "$base/gtf/homo_sapiens/Homo_sapiens.GRCh38.${release}.chr_patch_hapl_scaff.gtf.gz" \
+  "$outdir/Homo_sapiens.GRCh38.${release}.chr_patch_hapl_scaff.gtf.gz"
+download "$base/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.toplevel.fa.gz" \
+  "$outdir/Homo_sapiens.GRCh38.dna.toplevel.fa.gz"
+
+log info "downloaded files are in $outdir"
+log info "tip: gunzip the genome and run 'samtools faidx' to avoid loading 3 GB into memory"

@@ -1,6 +1,8 @@
 '''
-Description: 
-version: 
+Description: legacy VCF-vs-genome REF check snippet.
+DEPRECATED: use `python -m mutatedseq diagnose -g ... -a ... -v ... -o ...`
+for a complete REF-offset and CDS/stop diagnostic report.
+version:
 Author: wenyuhao
 Date: 2023-05-15 10:27:46
 LastEditors: wenyuhao

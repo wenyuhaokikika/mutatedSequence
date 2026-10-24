@@ -1,0 +1,51 @@
+mutatedSequence run summary
+===========================
+VCF records parsed: 40
+alleles selected: 38
+edits applied: 35
+allele-skipped records: 2
+REF mismatches: 2
+unresolved alleles (symbolic/REF mismatch): 2
+overlap-rejected edits: 1
+symbolic edits: 7
+transcripts in annotation (CDS): 6
+transcripts processed: 6
+transcripts with edits: 6
+transcripts with changed protein: 6
+stop_lost transcripts: 2
+stop_gained transcripts: 4
+start_lost transcripts: 1
+frameshift transcripts: 4
+
+Reference model classes:
+  complete: 4
+  partial_5_complete_3: 1
+  partial_3: 1
+
+Variant consequences:
+  missense: 7
+  inframe_deletion: 5
+  frameshift: 4
+  inframe_insertion: 3
+  no_overlapping_transcript: 3
+  nonsense: 2
+  stop_lost: 2
+  3_prime_UTR: 2
+  unresolved: 2
+  hom_ref: 2
+  5_prime_UTR: 1
+  start_lost: 1
+  synonymous: 1
+  splice_donor: 1
+  intron: 1
+  splice_acceptor: 1
+  protein_altering: 1
+  overlap_skipped: 1
+
+Selection skip reasons:
+  hom_ref: 2
+
+Reference validation (true/false/unknown):
+  CDS vs Ensembl: True=6
+  cDNA vs Ensembl: True=6
+  protein vs Ensembl: True=6

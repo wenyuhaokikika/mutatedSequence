@@ -1,0 +1,41 @@
+chrom	chrom_vcf	pos	id	ref	alt_all	alt_selected	allele_index	gt	phased	qual	filter	svtype	end	svlen	status	variant_note	edit_kind	edit_start0	edit_end0	edit_length_delta	symbolic	unresolved	skipped	edit_note	ref_match	genome_ref	ref_offset	ref_offset_strand	genome_context	ref_note	n_transcripts	genes	transcripts
+chr1	1	602	A_start_lost	T	A	A	1	1/1	False	50.0	PASS				selected		snv	601	602	0	False	False	False		True	T	0	+	TAACCTGAGATGGCTTGTGAT		1	A	TX_A
+chr1	1	631	A_missense	C	A	A	1	0/1	False	50.0	PASS				selected		snv	630	631	0	False	False	False		True	C	0	+	TCATATTAAACTGATGAATCC		1	A	TX_A
+chr1	1	663	A_synonymous	T	C	C	1	0/1	False	50.0	PASS				selected		snv	662	663	0	False	False	False		True	T	0	+	CTGTTTGGTATGCTTGTGATG		1	A	TX_A
+chr1	1	688	A_nonsense	A	T	T	1	1/1	False	50.0	PASS				selected		snv	687	688	0	False	False	False		True	A	0	+	TGGTCATATTAAACTGATGAA		1	A	TX_A
+chr1	1	721	A_frameshift_ins	T	TC	TC	1	0/1	False	50.0	PASS				selected		ins	720	721	1	False	False	False		True	T	0	+	TACTGTTTGGTATGCTTGTGA		1	A	TX_A
+chr1	1	750	A_inframe_del	ACTG	A	A	1	1/1	False	50.0	PASS				selected		del	749	753	-3	False	False	False		True	ACTG	0	+	GTCATATTAAACTGATGAATCCTC		1	A	TX_A
+chr1	1	811	A_mnv	CT	GA	GA	1	0/1	False	50.0	PASS				selected		mnv	810	812	0	False	False	False		True	CT	0	+	TCATATTAAACTGATGAATCCT		1	A	TX_A
+chr1	1	2300	A_stop_lost	T	C	C	1	0/1	False	50.0	PASS				selected		snv	2299	2300	0	False	False	False		True	T	0	+	ACTGATGAATTAAGAATTTGG		1	A	TX_A
+chr1	1	1701	A_splice_donor	A	C	C	1	0/1	False	50.0	PASS				selected		snv	1700	1701	0	False	False	False		True	A	0	+	TACTGTTTGGATCTGCACATG		1	A	TX_A
+chr1	1	550	A_utr5	A	C	C	1	0/1	False	50.0	PASS				selected		snv	549	550	0	False	False	False		True	A	0	+	GAAATAGTAAACCATTTTACG		1	A	TX_A
+chr1	1	2400	A_utr3	C	G	G	1	1/1	False	50.0	PASS				selected		snv	2399	2400	0	False	False	False		True	C	0	+	CCTCAACGTTCTACTGTTTGG		1	A	TX_A
+chr1	1	2000	A_intron	C	G	G	1	0/1	False	50.0	PASS				selected		snv	1999	2000	0	False	False	False		True	C	0	+	ACTTTCGCGCCCCTCAATATC		1	A	TX_A
+chr1	1	850	A_del_exon_span	G	<DEL>	<DEL>	1	0/1	False	50.0	PASS	DEL	1500	-650	selected		symbolic_del	850	1500	-650	True	False	False		True	G	0	+	GTATGCTTGTGATGAATTTGG		1	A	TX_A
+chr1	1	780	A_overlap_del	GTAT	G	G	1	1/1	False	50.0	PASS				selected		del	779	783	-3	False	False	False		True	GTAT	0	+	CTACTGTTTGGTATGCTTGTGATG		1	A	TX_A
+chr1	1	782	A_overlap_snv	A	C	C	1	1/1	False	50.0	PASS				overlap_skipped	overlaps chr1:780:GTAT:G#1; not applied	snv	781	782	0	False	False	True	overlaps chr1:780:GTAT:G#1; not applied	True	A	0	+	ACTGTTTGGTATGCTTGTGAT		0		
+chr1	1	450	A_bad_ref	C	A	A	1	0/1	False	50.0	PASS				unresolved	single-base REF mismatch; an offset search is not meaningful. Check the assembly, chromosome naming, or the base at POS.	ref_mismatch	449	450	0	False	True	False	single-base REF mismatch; an offset search is not meaningful. Check the assembly, chromosome naming, or the base at POS.	False	A			TCATTAGGCTACTAACGCCGC	single-base REF mismatch; an offset search is not meaningful. Check the assembly, chromosome naming, or the base at POS.	0		
+chr1	1	470	A_hom_ref	A	C		0	0/0	False	50.0	PASS				hom_ref										True	A	0	+	CCGGGTCGTTACTCGAAAAGC		0		
+chr1	1	480	A_missing_gt	C	G	G	1	./.	False	50.0	PASS				selected		snv	479	480	0	False	False	False		True	C	0	+	ACTCGAAAAGCAGGTGGAATT		0		
+chr1	1	4070	B_missense	G	T	T	1	1/1	False	50.0	PASS				selected		snv	4069	4070	0	False	False	False		True	G	0	+	GGATTCATCAGTTTAATATGA		1	B	TX_B
+chr1	1	3949	B_frameshift_del	AG	A	A	1	0/1	False	50.0	PASS				selected		del	3948	3950	-1	False	False	False		True	AG	0	+	AGGATTCATCAGTTTAATATGA		1	B	TX_B
+chr1	1	3301	B_splice	C	G	G	1	0/1	False	50.0	PASS				selected		snv	3300	3301	0	False	False	False		True	C	0	+	CACAAGCATACCCGAGAGGCT		1	B	TX_B
+chr1	1	2950	B_utr3	T	A	A	1	1/1	False	50.0	PASS				selected		snv	2949	2950	0	False	False	False		True	T	0	+	AGGTAATCATTAACTACCGAA		1	B	TX_B
+chr1	1	3269	B_symbolic_del	A	<DEL>	<DEL>	1	0/1	False	50.0	PASS	DEL	3278	-9	selected		symbolic_del	3269	3278	-9	True	False	False		True	A	0	+	AGGATTCATCAGTTTAATATG		1	B	TX_B
+chr1	1	3999	B_symbolic_ins	A	<INS>	<INS>	1	0/1	False	50.0	PASS	INS	3999	3	selected		symbolic_ins	3999	3999	3	True	False	False	inserted sequence from LEFT_SVINSSEQ	True	A	0	+	TAGAACGTTGAGGATTCATCA		1	B	TX_B
+chr1	1	5031	C_missense	A	C	C	1	0/1	False	50.0	PASS				selected		snv	5030	5031	0	False	False	False		True	A	0	+	ATGAATCCTCAACGTTCTACT		1	C	TX_C
+chr1	1	5061	C_frameshift_ins	A	AG	AG	1	0/1	False	50.0	PASS				selected		ins	5060	5061	1	False	False	False		True	A	0	+	GCTTGTGATGAATTTGGTCAT		1	C	TX_C
+chr1	1	6088	D_stop_gained	A	T	T	1	1/1	False	50.0	PASS				selected		snv	6087	6088	0	False	False	False		True	A	0	+	TGGTCATATTAAACTGATGAA		1	D	TX_D
+chr1	1	6121	D_frameshift_ins	T	TT	TT	1	0/1	False	50.0	PASS				selected		ins	6120	6121	1	False	False	False		True	T	0	+	TACTGTTTGGTATGCTTGTGA		1	D	TX_D
+chr1	1	7401	E_stop_lost_split	T	C	C	1	0/1	False	50.0	PASS				selected		snv	7400	7401	0	False	False	False		True	T	0	+	TACTGTTTGGTGGGAACCTTC		1	E	TX_E
+chr2	2	883	G_multiallelic	C	A,T	A	1	1/2	False	50.0	PASS				selected		snv	882	883	0	False	False	False		True	C	0	+	GATGAATCCTCAACGTTCTAC		1	G	TX_G
+chr2	2	886	G_phased	C	A	A	1	1|0	True	50.0	PASS				selected		snv	885	886	0	False	False	False		True	C	0	+	GAATCCTCAACGTTCTACTGT		1	G	TX_G
+chr2	2	601	G_alt_start	A	C	C	1	0/1	False	50.0	PASS				selected		snv	600	601	0	False	False	False		True	A	0	+	GTAGCCACTTATGGCTTGTGA		1	G	TX_G
+chr2	2	630	G_symbolic_del	A	<DEL>	<DEL>	1	0/1	False	50.0	PASS	DEL	639	-9	selected		symbolic_del	630	639	-9	True	False	False		True	A	0	+	GTCATATTAAACTGATGAATC		1	G	TX_G
+chr2	2	690	G_symbolic_ins	A	<INS>	<INS>	1	0/1	False	50.0	PASS	INS	690	3	selected		symbolic_ins	690	690	3	True	False	False	inserted sequence from LEFT_SVINSSEQ	True	A	0	+	GTCATATTAAACTGATGAATC		1	G	TX_G
+chr2	2	750	G_symbolic_dup	A	<DUP>	<DUP>	1	1/1	False	50.0	PASS	DUP	780	30	selected		symbolic_dup	780	780	30	True	False	False	tandem duplication applied after END	True	A	0	+	GTCATATTAAACTGATGAATC		1	G	TX_G
+chr2	2	810	G_symbolic_inv	A	<INV>	<INV>	1	0/1	False	50.0	PASS	INV	840	30	selected		symbolic_inv	810	840	0	True	False	False	inverted interval POS+1..END	True	A	0	+	GTCATATTAAACTGATGAATC		1	G	TX_G
+chr2	2	1500	G_explicit_ins	T	TTT	TTT	1	0/1	False	50.0	PASS				selected		ins	1499	1500	2	False	False	False		True	T	0	+	GGAAGGCCGGTGGGTTTATAC		0		
+chr2	2	2000	G_bad_ref	A	A	A	1	0/1	False	50.0	PASS				unresolved	single-base REF mismatch; an offset search is not meaningful. Check the assembly, chromosome naming, or the base at POS.	ref_mismatch	1999	2000	0	False	True	False	single-base REF mismatch; an offset search is not meaningful. Check the assembly, chromosome naming, or the base at POS.	False	T			GAATAATCGCTGTGGTGATCT	single-base REF mismatch; an offset search is not meaningful. Check the assembly, chromosome naming, or the base at POS.	0		
+chr2	2	2200	G_homref	G	T		0	0/0	False	50.0	PASS				hom_ref										True	G	0	+	ACTCCCGAGAGCCGCAGTTCT		0		
+chr2	2	2300	G_missing_gt	G	T	T	1	./.	False	50.0	PASS				selected		snv	2299	2300	0	False	False	False		True	G	0	+	GTTCGTAGCAGGCGATGAGTC		0		

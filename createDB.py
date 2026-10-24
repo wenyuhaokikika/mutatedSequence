@@ -3,10 +3,14 @@
 '''
 @File    :   createDB.py
 @Time    :   2023/05/05 12:46:31
-@Author  :   wenyuhao 
+@Author  :  wenyuhao
 @Version :   1.0
 @Contact :   925201392@qq.com
-@Desc    :   None
+@Desc    :   DEPRECATED legacy CDS-BED builder.
+
+The current pipeline reconstructs transcripts directly from the genome and
+GTF, so a pre-built CDS BED is no longer required.  This file is retained for
+historical reference; use `python -m mutatedseq run ...` instead.
 '''
 
 # here put the import lib

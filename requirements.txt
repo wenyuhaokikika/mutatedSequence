@@ -1,0 +1,7 @@
+# No third-party Python runtime dependencies.
+# Python >= 3.8 is required.
+#
+# Optional external tools (not required by the Python pipeline):
+#   samtools   # build/use .fai indexes for large genomes
+#   bcftools   # cross-check the normalized VCF
+#   seqkit     # FASTA/TSV convenience in the legacy shell scripts

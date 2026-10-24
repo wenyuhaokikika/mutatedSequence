@@ -1,0 +1,4 @@
+# The image is environment-only.  Do not send the repository as build context;
+# the source is bind-mounted at /workspace when the container starts.
+*
+!Dockerfile

@@ -1,0 +1,61 @@
+{
+  "n_records": 40,
+  "n_selected": 38,
+  "n_applied": 35,
+  "n_skipped_allele": 2,
+  "n_ref_mismatch": 2,
+  "n_unresolved": 2,
+  "n_overlap": 1,
+  "n_symbolic": 7,
+  "n_transcripts_total": 6,
+  "n_transcripts_processed": 6,
+  "n_transcripts_mutated": 6,
+  "n_transcripts_protein_changed": 6,
+  "n_stop_lost": 2,
+  "n_stop_gained": 4,
+  "n_start_lost": 1,
+  "n_frameshift": 4,
+  "reference_classes": {
+    "complete": 4,
+    "partial_5_complete_3": 1,
+    "partial_3": 1
+  },
+  "consequences": {
+    "5_prime_UTR": 1,
+    "start_lost": 1,
+    "missense": 7,
+    "synonymous": 1,
+    "nonsense": 2,
+    "frameshift": 4,
+    "inframe_deletion": 5,
+    "splice_donor": 1,
+    "intron": 1,
+    "stop_lost": 2,
+    "3_prime_UTR": 2,
+    "splice_acceptor": 1,
+    "inframe_insertion": 3,
+    "protein_altering": 1,
+    "overlap_skipped": 1,
+    "unresolved": 2,
+    "hom_ref": 2,
+    "no_overlapping_transcript": 3
+  },
+  "skip_reasons": {
+    "hom_ref": 2
+  },
+  "cds_matches": {
+    "True": 6
+  },
+  "cdna_matches": {
+    "True": 6
+  },
+  "protein_matches": {
+    "True": 6
+  },
+  "sample": "S1",
+  "allele_mode": "alt",
+  "alt_index": 1,
+  "overlap_policy": "skip",
+  "extend_mode": "utr",
+  "extend_bp": 5000
+}

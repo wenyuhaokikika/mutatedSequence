@@ -1,0 +1,13 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.venv/
+.ensembl_test/
+.i65.json
+resource/
+tests/tmp_out*/
+tests/out*/
+*.fai
+*.log
