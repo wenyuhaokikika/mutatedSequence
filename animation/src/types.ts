@@ -2,6 +2,7 @@ export type SceneTiming = {
   id: string;
   title: string;
   narration: string;
+  captions: string[];
   audio: string;
   seconds: number;
   durationInFrames: number;

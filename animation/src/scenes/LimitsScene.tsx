@@ -101,27 +101,27 @@ export const LimitsScene: React.FC<SceneProps> = ({scene, index, total}) => {
           >
             不求“看起来什么都行”。
             <br />
-            不确定的地方，明确标出 unresolved。
+            不确定的地方，明确标出来。
           </div>
         </div>
 
         <div style={{display: 'flex', gap: 24, marginTop: 42, justifyContent: 'center'}}>
           <LimitCard
             k="phasing"
-            title="未 phasing 的 compound"
-            body="overlap 的 variant 不能硬塞进一条 consensus；hap1/hap2 只是按 GT 顺序取。"
+            title="两份菜谱混在一起"
+            body="没有 phasing，两个副本的改动会变成一个 mosaic；看起来像，但不等于真实的两条单倍型。"
             delay={12}
           />
           <LimitCard
             k="splicing"
-            title="exon skipping / cryptic splice"
-            body="splice region 会注释，但 exon 结构固定；它不会凭空生成 alternative transcript。"
+            title="跳页 / 剪接"
+            body="剪接位点让页面被跳过或重排；工具仍按原目录翻，不会自动生成新版本。"
             delay={20}
           />
           <LimitCard
             k="SV"
-            title="TRA / BND / CNV"
-            body="无法表示成一条 linear transcript 的复杂重排，会标记 unresolved，而不是猜。"
+            title="搬家 / 复制 / 倒装"
+            body="TRA、BND、CNV 把段落搬到别的书里，或整章复制；一条线性转录本装不下。"
             delay={28}
           />
         </div>

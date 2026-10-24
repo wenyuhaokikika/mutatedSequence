@@ -137,17 +137,17 @@ Core properties:
 
 ## Explainer video
 
-A 112-second, 1080p/30 fps Remotion explainer lives in [`animation/`](animation/).
-It uses the playful-but-gentle Chinese voice `zh-CN-XiaoyiNeural` (-4% rate,
-+2 Hz pitch) and cuts the 10 scenes to the actual narration durations.
+A 7-minute 26-second, 1080p/30 fps Remotion explainer lives in [`animation/`](animation/).
+It uses the playful-but-gentle Chinese voice `zh-CN-XiaoyiNeural` (-6% rate,
++2 Hz pitch) and cuts the 13 scenes to the actual narration durations.
 
 - Direction and shot list: [`animation/STORYBOARD.md`](animation/STORYBOARD.md)
 - Source and render instructions: [`animation/README.md`](animation/README.md)
 - Watch the rendered cut: https://wenyuhaokikika.github.io/2026/10/24/mutatedsequence-vcf-to-transcript-protein/
 - Render: `cd animation && ./render.sh` → `animation/out/explainer.mp4`
-- The cut covers the hook, old per-exon pain points, inputs, REF check/`--strict`,
-  allele selection, genomic blocks, cDNA/CDS/protein, auditable TSV, honest
-  limits and the outro.
+- The cut covers the WGS→AI gap, the genome-as-recipe analogy, inputs, REF check, allele
+  selection, genomic blocks, cDNA/CDS/protein, stop-codon loss, auditable TSV,
+  a Docker walkthrough, tool comparison, honest limits and the outro.
 
 ## Install
 
@@ -645,6 +645,25 @@ match status is written to the TSV.
 
 Per-variant consequences are independent of each other. The transcript-level
 aggregate (`protein_diff_aggregate`) uses all accepted variants together.
+
+### Stop-codon loss and readthrough
+
+Yes, this case is handled. If the annotated stop codon is changed or deleted,
+the mutated CDS is still translated in frame. By default translation continues
+into the **spliced 3' UTR**, up to `--extend-bp` (default 5000):
+
+- if another in-frame stop is found, the extended protein ends there
+  (`protein_ext_stop=true`);
+- if no stop is found, translation reaches the end of the available extension
+  and the TSV marks `stop_lost=true` and `protein_ext_stop=false`; the protein
+  is not silently cut at the old stop.
+
+The tool does **not** translate an entire chromosome. If the next stop lies
+beyond the annotated transcript end, use `--extend-mode utr+genomic` or
+`genomic` (or increase `--extend-bp`); `genomic` may include introns.
+`--extend-mode none` stops at the annotated CDS end. A reference that already
+lacks a stop (`partial_3`) has no stop to lose; a mutation that creates one is
+reported as `stop_gained`.
 
 ### Why not `bcftools consensus` on per-exon records?
 

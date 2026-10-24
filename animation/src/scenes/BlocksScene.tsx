@@ -75,9 +75,9 @@ export const BlocksScene: React.FC<SceneProps> = ({scene, index, total}) => {
             </h2>
           </div>
           <div style={{fontSize: 15, color: COLORS.muted, lineHeight: 1.6, textAlign: 'right'}}>
-            reference block / ALT block / insertion block
+            先改基因组，再按注释切外显子
             <br />
-            deletion 跨 intron 也不会丢
+            删除跨过内含子，也不会丢
           </div>
         </div>
 
@@ -91,8 +91,8 @@ export const BlocksScene: React.FC<SceneProps> = ({scene, index, total}) => {
           }}
         >
           <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: 16}}>
-            <span style={{fontFamily: MONO, fontSize: 13, color: COLORS.muted}}>reference genome</span>
-            <span style={{fontSize: 12, color: COLORS.muted}}>5′ → 3′ · plus strand</span>
+            <span style={{fontFamily: MONO, fontSize: 13, color: COLORS.muted}}>参考基因组</span>
+            <span style={{fontSize: 12, color: COLORS.muted}}>正链 · 5′ → 3′</span>
           </div>
           <div style={{position: 'relative', height: 98, margin: '0 10px'}}>
             <div
@@ -118,9 +118,9 @@ export const BlocksScene: React.FC<SceneProps> = ({scene, index, total}) => {
                 opacity: line,
               }}
             >
-              <ExonBox left="7%" width="14%" label="exon 1" color={COLORS.coral} delay={12} />
-              <ExonBox left="33%" width="15%" label="exon 2" color={COLORS.teal} delay={16} />
-              <ExonBox left="65%" width="17%" label="exon 3" color={COLORS.lavender} delay={20} />
+              <ExonBox left="7%" width="14%" label="外显子 1" color={COLORS.coral} delay={12} />
+              <ExonBox left="33%" width="15%" label="外显子 2" color={COLORS.teal} delay={16} />
+              <ExonBox left="65%" width="17%" label="外显子 3" color={COLORS.lavender} delay={20} />
               <div
                 style={{
                   position: 'absolute',
@@ -181,7 +181,7 @@ export const BlocksScene: React.FC<SceneProps> = ({scene, index, total}) => {
                 opacity: bracket,
               }}
             >
-              DEL spans intron
+              删除跨过内含子
             </div>
             <div
               style={{
@@ -208,7 +208,7 @@ export const BlocksScene: React.FC<SceneProps> = ({scene, index, total}) => {
                 opacity: bracket,
               }}
             >
-              INS
+              插入
             </div>
             <div
               style={{
@@ -238,9 +238,9 @@ export const BlocksScene: React.FC<SceneProps> = ({scene, index, total}) => {
         >
           <span style={{fontFamily: MONO, fontSize: 12, color: COLORS.muted, width: 70}}>blocks →</span>
           {[
-            {label: 'reference', color: COLORS.teal, detail: '从 genome 取'},
-            {label: 'ALT', color: COLORS.coral, detail: '替换/删除'},
-            {label: 'insertion', color: COLORS.gold, detail: '插在中间'},
+            {label: '原基因组', color: COLORS.teal, detail: '从参考基因组取'},
+            {label: '改后的块', color: COLORS.coral, detail: '替换 / 删除'},
+            {label: '插入的块', color: COLORS.gold, detail: '插在中间'},
           ].map((b) => (
             <div
               key={b.label}
@@ -292,15 +292,15 @@ export const BlocksScene: React.FC<SceneProps> = ({scene, index, total}) => {
             }}
           >
             <span style={{fontFamily: MONO, fontSize: 12, color: COLORS.teal, fontWeight: 800}}>
-              exon 1 + exon 2
+              外显子 1 + 外显子 2
             </span>
-            <span style={{fontSize: 14, color: COLORS.muted}}>intersect blocks</span>
+            <span style={{fontSize: 14, color: COLORS.muted}}>按 block 切取</span>
             <span style={{fontSize: 18, color: COLORS.teal}}>→</span>
-            <span style={{fontSize: 14, fontWeight: 800, color: COLORS.ink}}>mutated cDNA</span>
+            <span style={{fontSize: 14, fontWeight: 800, color: COLORS.ink}}>突变后转录本</span>
           </div>
           <ArrowLine width={80} delay={64} color={COLORS.coral} />
           <span style={{fontSize: 14, color: COLORS.muted}}>
-            哪怕 deletion 横跨 intron，也只切走 exonic 部分。
+            哪怕删除横跨内含子，也只切走外显子部分。
           </span>
         </div>
       </AbsoluteFill>

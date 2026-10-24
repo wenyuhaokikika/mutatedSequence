@@ -1,6 +1,6 @@
 # mutatedSequence · Remotion explainer
 
-A **1:52**, 1920×1080 / 30 fps explainer for the VCF → transcript → protein
+A **7:26**, 1920×1080 / 30 fps explainer for the VCF → transcript → protein
 pipeline. The narration is Chinese, performed by the playful-but-gentle
 `zh-CN-XiaoyiNeural` voice.
 
@@ -14,16 +14,19 @@ pipeline. The narration is Chinese, performed by the playful-but-gentle
 
 | # | Scene | Time |
 |---:|---|---|
-| 01 | Hook — one letter, one protein | 0:00–0:07 |
-| 02 | Old per-exon pipeline gets lost | 0:07–0:18 |
-| 03 | Three inputs | 0:18–0:26 |
-| 04 | REF check + `--strict` | 0:26–0:39 |
-| 05 | Choose one allele | 0:39–0:52 |
-| 06 | Genomic blocks | 0:52–1:05 |
-| 07 | cDNA → CDS → protein | 1:05–1:18 |
-| 08 | Auditable TSV / FASTA | 1:18–1:30 |
-| 09 | Honest limits | 1:30–1:43 |
-| 10 | Outro | 1:43–1:52 |
+| 01 | Why — WGS data + AI structures, and the missing bridge | 0:00–0:56 |
+| 02 | Map — genome → transcript → protein, in plain language | 0:56–1:32 |
+| 03 | Three inputs and the outputs | 1:32–2:06 |
+| 04 | Check the address (REF) | 2:06–2:35 |
+| 05 | Two copies, choose one version | 2:35–3:08 |
+| 06 | Edit genomic blocks first | 3:08–3:35 |
+| 07 | cDNA → CDS → protein | 3:35–4:05 |
+| 08 | Stop-codon loss and readthrough | 4:05–4:50 |
+| 09 | Auditable TSV / FASTA | 4:50–5:16 |
+| 10 | Docker in one command | 5:16–5:36 |
+| 11 | Where it fits among VEP/Haplosaurus/VCF2Prot/ORFan | 5:36–6:29 |
+| 12 | Honest limits | 6:29–7:08 |
+| 13 | Outro | 7:08–7:26 |
 
 ## Voice
 
@@ -31,15 +34,16 @@ pipeline. The narration is Chinese, performed by the playful-but-gentle
 
 ```text
 voice: zh-CN-XiaoyiNeural
-rate:  -4%
+rate:  -6%
 pitch: +2Hz
-tail:  1.0s per scene
+tail:  0.9s per scene
 ```
 
-Xiaoyi is the lively/cartoon female voice in Edge TTS; the slightly slower rate
-and small pitch lift keep it playful without sounding rushed. The script calls
-`ffprobe` to measure each MP3 and writes `src/timing.json`, so the edit is cut to
-the voice rather than to guessed durations.
+Xiaoyi is the lively/cartoon female voice in Edge TTS; the slower rate and
+small pitch lift keep it playful and gentle, with room for a non-specialist
+audience. The script calls `ffprobe` to measure each MP3 and writes
+`src/timing.json`, so the edit is cut to the voice rather than to guessed
+durations. The narration is split into 2–5 short caption chunks per scene.
 
 Regenerate the audio (requires `ffmpeg` + `edge-tts`):
 

@@ -237,11 +237,22 @@ export const SceneShell: React.FC<{
   });
   const fadeOut = interpolate(frame, [duration - 10, duration], [1, 0], clamp);
   const opacity = Math.min(fadeIn, fadeOut);
-  const caption = spring({
-    frame: frame - 7,
-    fps,
-    config: {damping: 20, mass: 0.7, stiffness: 110},
-  });
+  const captions =
+    scene.captions && scene.captions.length > 0
+      ? scene.captions
+      : [scene.narration];
+  const chunkSpan = duration / captions.length;
+  const captionIndex = Math.min(
+    captions.length - 1,
+    Math.max(0, Math.floor(frame / chunkSpan)),
+  );
+  const within = frame - captionIndex * chunkSpan;
+  const capOpacity = interpolate(
+    within,
+    [0, 5, Math.max(6, chunkSpan - 5), chunkSpan],
+    [0, 1, 1, 0],
+    clamp,
+  );
   const progress = ((index + Math.min(frame / duration, 1)) / total) * 100;
   return (
     <AbsoluteFill style={{opacity, color: COLORS.ink, fontFamily: FONT}}>
@@ -304,8 +315,8 @@ export const SceneShell: React.FC<{
           display: 'flex',
           justifyContent: 'center',
           padding: '0 120px',
-          opacity: caption,
-          transform: `translateY(${(1 - caption) * 18}px)`,
+          opacity: capOpacity,
+          transform: `translateY(${(1 - capOpacity) * 8}px)`,
         }}
       >
         <div
@@ -340,7 +351,7 @@ export const SceneShell: React.FC<{
               textWrap: 'pretty',
             }}
           >
-            {scene.narration}
+            {captions[captionIndex]}
           </div>
         </div>
       </div>

@@ -45,10 +45,10 @@ const CheckRow: React.FC<{
       </div>
       <div style={{flex: 1}}>
         <div style={{display: 'flex', alignItems: 'center', gap: 10}}>
-          <span style={{fontFamily: MONO, fontSize: 12, color: COLORS.muted}}>VCF</span>
+          <span style={{fontFamily: MONO, fontSize: 12, color: COLORS.muted}}>VCF 说</span>
           <Base value={vcf} bg="rgba(255,255,255,0.8)" color={COLORS.ink} size={28} />
           <span style={{fontSize: 14, color: COLORS.muted}}>vs</span>
-          <span style={{fontFamily: MONO, fontSize: 12, color: COLORS.muted}}>genome</span>
+          <span style={{fontFamily: MONO, fontSize: 12, color: COLORS.muted}}>参考</span>
           <Base value={genome} bg="rgba(255,255,255,0.8)" color={color} size={28} />
         </div>
         <div style={{fontSize: 14, color: COLORS.muted, marginTop: 7, lineHeight: 1.4}}>{note}</div>
@@ -64,7 +64,7 @@ const CheckRow: React.FC<{
           padding: '5px 8px',
         }}
       >
-        {ok ? 'ref_match=true' : 'ref_match=false'}
+        {ok ? '对上了' : '对不上'}
       </span>
     </div>
   );
@@ -74,14 +74,13 @@ export const RefCheckScene: React.FC<SceneProps> = ({scene, index, total}) => {
   const title = useEnter(2, 18);
   const left = useEnter(10, 15);
   const right = useEnter(18);
-  const strict = useEnter(46);
   return (
     <SceneShell scene={scene} index={index} total={total} accent={COLORS.teal}>
       <AbsoluteFill>
         <div style={{display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between'}}>
           <div style={fadeUp(title, 18)}>
             <Pill color={COLORS.teal} bg={COLORS.tealSoft} style={{marginBottom: 14}}>
-              step 01 · REF check
+              step 01 · 地址检查
             </Pill>
             <h2
               style={{
@@ -94,19 +93,19 @@ export const RefCheckScene: React.FC<SceneProps> = ({scene, index, total}) => {
               }}
             >
               先对暗号：
-              <span style={{color: COLORS.teal}}>REF 对得上吗？</span>
+              <span style={{color: COLORS.teal}}>原来的碱基对得上吗？</span>
             </h2>
           </div>
           <div style={{fontSize: 15, color: COLORS.muted, lineHeight: 1.6, textAlign: 'right'}}>
-            forward strand · 位置 1-based
+            先确认版本、坐标、染色体名
             <br />
-            单碱基 mismatch 不做偏移搜索
+            对不上，就不要硬翻译
           </div>
         </div>
 
         <div style={{display: 'flex', gap: 46, marginTop: 38, alignItems: 'flex-start'}}>
           <div style={{width: 710, ...fadeUp(left, 20)}}>
-            <ChromosomeRibbon width={680} highlight={0.42} delay={12} markerLabel="variant" />
+            <ChromosomeRibbon width={680} highlight={0.42} delay={12} markerLabel="变异位置" />
             <div style={{display: 'flex', gap: 16, marginTop: 22, alignItems: 'center'}}>
               <VcfCard refBase="C" altBase="T" gt="0/1" delay={16} mismatch />
               <div style={{fontSize: 30, color: COLORS.coral, fontWeight: 800}}>≠</div>
@@ -118,15 +117,15 @@ export const RefCheckScene: React.FC<SceneProps> = ({scene, index, total}) => {
                   background: 'rgba(255,253,252,0.9)',
                 }}
               >
-                <div style={{fontFamily: MONO, fontSize: 12, color: COLORS.muted}}>genome at POS</div>
+                <div style={{fontFamily: MONO, fontSize: 12, color: COLORS.muted}}>参考基因组这一位</div>
                 <div style={{display: 'flex', alignItems: 'center', gap: 8, marginTop: 10}}>
                   <Base value="A" bg="rgba(255,255,255,0.8)" color={COLORS.teal} />
-                  <span style={{fontSize: 13, color: COLORS.muted}}>actual base</span>
+                  <span style={{fontSize: 13, color: COLORS.muted}}>实际是</span>
                 </div>
               </div>
             </div>
             <div style={{display: 'flex', gap: 8, marginTop: 18, flexWrap: 'wrap'}}>
-              {['same assembly', 'contig alias', 'soft-mask'].map((x) => (
+              {['同一版本', '染色体名', '大小写'].map((x) => (
                 <span
                   key={x}
                   style={{
@@ -147,7 +146,7 @@ export const RefCheckScene: React.FC<SceneProps> = ({scene, index, total}) => {
 
           <div style={{flex: 1, ...fadeUp(right, 18)}}>
             <div style={{fontFamily: MONO, fontSize: 13, color: COLORS.muted, marginBottom: 12}}>
-              two possible outcomes
+              两种结果
             </div>
             <div style={{display: 'flex', flexDirection: 'column', gap: 14}}>
               <CheckRow
@@ -155,50 +154,30 @@ export const RefCheckScene: React.FC<SceneProps> = ({scene, index, total}) => {
                 genome="A"
                 ok
                 delay={24}
-                note="暗号对上，继续选 allele、应用 edit。"
+                note="对上了，继续往下走。"
               />
               <CheckRow
                 vcf="C"
                 genome="A"
                 ok={false}
                 delay={32}
-                note="默认：warning + ref_match=false，这个 variant 不应用。"
+                note="对不上：先别翻译，检查地图。"
               />
             </div>
             <div
               style={{
                 marginTop: 18,
-                padding: '16px 18px',
-                borderRadius: 18,
-                background: 'rgba(255,253,252,0.82)',
-                border: `1px dashed ${COLORS.red}55`,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                ...fadeUp(strict, 12),
+                padding: '14px 18px',
+                borderRadius: 15,
+                background: 'rgba(255,253,252,0.78)',
+                border: `1px dashed ${COLORS.red}33`,
+                fontSize: 13,
+                color: COLORS.muted,
+                lineHeight: 1.55,
+                ...fadeUp(right, 10),
               }}
             >
-              <div>
-                <div style={{fontFamily: MONO, fontSize: 13, fontWeight: 800, color: COLORS.red}}>
-                  --strict
-                </div>
-                <div style={{fontSize: 13, color: COLORS.muted, marginTop: 4}}>
-                  第一条 mismatch 直接报错
-                </div>
-              </div>
-              <div
-                style={{
-                  fontFamily: MONO,
-                  fontSize: 13,
-                  fontWeight: 800,
-                  color: COLORS.paper,
-                  background: COLORS.red,
-                  padding: '8px 12px',
-                  borderRadius: 9,
-                }}
-              >
-                exit 2
-              </div>
+              对不上，不一定是工具坏了：先看 assembly、染色体名和坐标，再决定要不要继续。
             </div>
           </div>
         </div>

@@ -76,7 +76,7 @@ export const ProteinScene: React.FC<SceneProps> = ({scene, index, total}) => {
         <div style={{display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between'}}>
           <div style={fadeUp(title, 18)}>
             <Pill color={COLORS.lavender} bg={COLORS.lilac} style={{marginBottom: 14}}>
-              step 04 · transcript → protein
+              step 04 · 转录本 → 蛋白
             </Pill>
             <h2
               style={{
@@ -93,14 +93,14 @@ export const ProteinScene: React.FC<SceneProps> = ({scene, index, total}) => {
             </h2>
           </div>
           <div style={{fontSize: 15, color: COLORS.muted, lineHeight: 1.6, textAlign: 'right'}}>
-            annotated protein 停在注释 stop；
+            正常蛋白停在终止密码子；
             <br />
-            3′ extension 负责 readthrough。
+            3′ 延伸负责「停不下来」的情况。
           </div>
         </div>
 
         <div style={{display: 'flex', gap: 20, marginTop: 30, alignItems: 'stretch'}}>
-          <StageCard step="exons" title="cut & splice" color={COLORS.coral} delay={10}>
+          <StageCard step="外显子" title="剪接外显子" color={COLORS.coral} delay={10}>
             <div style={{display: 'flex', flexDirection: 'column', gap: 10, marginTop: 32}}>
               <div style={{display: 'flex', gap: 6, alignItems: 'center'}}>
                 <ExonMini label="E1" color={COLORS.coral} width={84} />
@@ -110,7 +110,7 @@ export const ProteinScene: React.FC<SceneProps> = ({scene, index, total}) => {
                 <ExonMini label="E3" color={COLORS.lavender} width={94} />
               </div>
               <div style={{fontSize: 13, color: COLORS.muted, lineHeight: 1.55, marginTop: 14}}>
-                按 GTF 的 exon 顺序切取；负链整体反向互补。
+                按注释的外显子顺序切取；负链整体反向互补。
               </div>
               <div style={{display: 'flex', gap: 6, marginTop: 12}}>
                 {['5′ UTR', 'CDS', '3′ UTR'].map((x) => (
@@ -132,16 +132,16 @@ export const ProteinScene: React.FC<SceneProps> = ({scene, index, total}) => {
             </div>
           </StageCard>
 
-          <StageCard step="cDNA" title="all exons" color={COLORS.teal} delay={18}>
+          <StageCard step="转录本" title="完整抄页" color={COLORS.teal} delay={18}>
             <SequenceStrip
-              label="transcript · 5′ → 3′"
+              label="转录本 · 5′ → 3′"
               sequence="ATGGCACGTACGTAGCTAGCTAGC"
               color={COLORS.teal}
               highlight={5}
               delay={22}
             />
             <div style={{fontSize: 13, color: COLORS.muted, lineHeight: 1.55, marginTop: 16}}>
-              完整 transcript：UTR、 exon、 exon junction 都在。
+              完整转录本：两端非编码区、外显子、剪接点都在。
             </div>
             <div
               style={{
@@ -155,13 +155,13 @@ export const ProteinScene: React.FC<SceneProps> = ({scene, index, total}) => {
                 fontWeight: 700,
               }}
             >
-              cDNA = exon concatenation
+              转录本 = 外显子拼接
             </div>
           </StageCard>
 
-          <StageCard step="CDS" title="frame matters" color={COLORS.gold} delay={26}>
+          <StageCard step="编码区" title="编码区" color={COLORS.gold} delay={26}>
             <SequenceStrip
-              label="coding sequence"
+              label="编码区"
               sequence="NNATGGCACGTACGTAGCTAGCTAA"
               color={COLORS.gold}
               highlight={2}
@@ -169,7 +169,7 @@ export const ProteinScene: React.FC<SceneProps> = ({scene, index, total}) => {
             />
             <div style={{display: 'flex', gap: 6, marginTop: 14, flexWrap: 'wrap'}}>
               <span style={{fontSize: 11, color: COLORS.coral, fontFamily: MONO, fontWeight: 800}}>
-                5′ N pad
+                5′ 缺 N
               </span>
               <span style={{fontSize: 11, color: COLORS.muted}}>·</span>
               <span style={{fontSize: 11, color: COLORS.green, fontFamily: MONO, fontWeight: 800}}>
@@ -177,21 +177,21 @@ export const ProteinScene: React.FC<SceneProps> = ({scene, index, total}) => {
               </span>
             </div>
             <div style={{fontSize: 13, color: COLORS.muted, lineHeight: 1.55, marginTop: 14}}>
-              GTF CDS 不含 stop，就补上 stop_codon；partial 5′ 保留 N pad。
+              有些注释不把终止密码子写进编码区，要单独补上；5′ 缺失时用 N 补齐。
             </div>
           </StageCard>
 
-          <StageCard step="protein" title="translate" color={COLORS.lavender} delay={34}>
+          <StageCard step="蛋白" title="翻译" color={COLORS.lavender} delay={34}>
             <div style={{fontFamily: MONO, fontSize: 12, color: COLORS.muted, marginBottom: 8}}>
-              annotated
+              正常翻译
             </div>
             <ProteinChain letters="MALWMRLLP" highlight={4} size={27} gap={4} delay={38} />
             <div style={{fontFamily: MONO, fontSize: 12, color: COLORS.muted, marginTop: 18, marginBottom: 8}}>
-              3′ extended
+              3′ 延伸
             </div>
             <ProteinChain letters="MALWMRLLP" highlight={4} size={27} gap={4} delay={44} />
             <div style={{fontSize: 13, color: COLORS.muted, lineHeight: 1.55, marginTop: 14}}>
-              stop-lost / frameshift 时，继续翻译到下一个 in-frame stop。
+              终止密码子丢失或移码时，继续翻译到下一个终止密码子。
             </div>
           </StageCard>
         </div>

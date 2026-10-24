@@ -120,13 +120,13 @@ export const OutroScene: React.FC<SceneProps> = ({scene, index, total}) => {
               ...fadeUp(links, 10),
             }}
           >
-            <span>open source</span>
+            <span>开源</span>
             <span>·</span>
-            <span>10 tests</span>
+            <span>中英文文档</span>
             <span>·</span>
-            <span>chr21 validated</span>
+            <span>测试通过</span>
             <span>·</span>
-            <span>no runtime Python deps</span>
+            <span>Docker</span>
           </div>
         </div>
         <Sparkle size={26} style={{left: 260, top: 160}} color={COLORS.coral} />

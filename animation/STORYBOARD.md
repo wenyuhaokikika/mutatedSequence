@@ -1,90 +1,130 @@
-# 分镜与节奏｜mutatedSequence 流程动画
+# 分镜与节奏｜从测序到蛋白：mutatedSequence 7 分钟讲解
 
 ## 一句话
 
-把“VCF 里一个字母，如何变成一条完整、可审计的蛋白”讲成一支 **1 分 52 秒** 的温柔科普短片；不堆术语，先把流程讲顺，再把边界讲清楚。
+用一本“菜谱”的比喻，把 **WGS 变异数据 → VCF → 转录本 → 蛋白序列 → 结构** 之间缺失的那座桥讲清楚；让不懂生物的人也能跟上，同时把“终止密码子失灵”和“哪些事做不到”说明白。
 
 ## 片子规格
 
 | 项目 | 设定 |
 |---|---|
-| 片名 | 把 VCF 变成一条蛋白 |
-| 时长 | 112.2 秒（3,366 帧） |
+| 片名 | 从测序到蛋白：一座缺失的桥 |
+| 时长 | **446.6 秒（7 分 26 秒）** |
 | 画幅 | 1920 × 1080，16:9 |
 | 帧率 | 30 fps |
-| 语言 | 普通话，技术名词保留英文 |
-| 旁白 | `zh-CN-XiaoyiNeural`，女声，lively / 俏皮 |
-| 语速 / 音高 | `rate -4%`，`pitch +2Hz`；温柔一点，但不拖 |
-| 字幕 | 每场完整旁白，底部奶油色胶囊 |
-| 配乐 | v1 不加 BGM，保留人声呼吸感；如果要加，建议 -22 LUFS 以下 |
+| 受众 | 不懂生物基础的人；投资、产品、AI、临床合作方 |
+| 旁白 | `zh-CN-XiaoyiNeural`，女声，俏皮但温柔 |
+| 语速 / 音高 | `rate -6%`，`pitch +2Hz`；比新闻慢，留出理解时间 |
+| 字幕 | 每场 2–5 个短句，按时间切换；不逐字滚动 |
+| 配乐 | v1 不加 BGM，保持人声清楚；如果要加，建议 -22 LUFS |
+
+## 开场策略
+
+不要用“如果把 VCF 里的一个小字母……”这种没有上下文的开场。  
+开场先给观众一个**他们已经知道的世界**：
+
+1. WGS 让测序变便宜，突变数据爆发（somatic + germline）；
+2. AI 让蛋白结构预测变准（AlphaFold3、RoseTTAFold、ESM）；
+3. 但 VCF 和蛋白模型之间，缺一条“把基因组变异变成干净蛋白序列”的桥。
+
+然后再问：**怎么从 VCF 走到蛋白序列，再走到结构？**
 
 ## 视觉方向
 
-- **底色**：奶油纸感 `#FFF8F0`，像一本摊开的实验记录本。
-- **主色**：珊瑚 `#FF6F61`（变异/重点）、青绿 `#2A9D8F`（reference/通过）、薰衣草 `#CDB4DB`（边界/未建模）、金色 `#F4C95D`（CDS/stop）。
-- **形状**：大圆角卡片、柔和投影、细网格、漂浮的 A/C/G/T、少量星星。
-- **字体**：Noto Sans CJK SC；代码/序列用 JetBrains Mono / Consolas。
-- **运动**：所有元素 8–14 帧 fade + 20px 上浮；spring 阻尼 14–18，不要弹得过火。每 1.5–2 秒给一个视觉变化点。
-- **镜头感**：不追求 3D；用“信息卡片 + 轻漂浮”的扁平动画，像在纸上推演。
-- **安全区**：左右 100px；标题下方 142px 开始内容；字幕底部 42px；进度条 7px。
+- 奶油纸感底色 `#FFF8F0`，像一本摊开的实验记录。
+- 珊瑚 `#FF6F61`：变异/重点；青绿 `#2A9D8F`：参考/通过；薰衣草 `#CDB4DB`：未知/边界；金色 `#F4C95D`：能量/结构。
+- 大圆角卡片、柔和投影、细网格、漂浮的 A/C/G/T；不使用 stock footage。
+- 比喻系统贯穿全片：**基因组 = 菜谱；转录本 = 抄页；蛋白 = 做出来的菜；结构 = 摆盘/功能**。
+- 字幕在底部奶油胶囊里，一次只放一个短句；观众不会被迫读长段。
+- 动画节制：8–14 帧 fade + 16–24px 上浮；spring 阻尼 14–18；不炫技。
 
 ## 叙事节奏
 
 ```text
-0–26s    钩子 + 旧流程痛点 + 输入      快 → 慢
-26–52s   REF 校验 + 等位基因           稳，两个“关卡”
-52–78s   genomic blocks + 中心法则     全片信息密度最高
-78–103s  输出审计 + 诚实边界           放慢，留白
-103–112s 收束 + CTA                    暖、短、干净
+0:00–1:32   为什么值得看：WGS 数据 + AI 结构 + 缺失的桥
+1:32–2:34   三个输入 + 输出
+2:34–4:05   对地址、选版本、先在基因组上改
+4:05–5:40   拼转录本、拼蛋白、终止密码子失灵
+5:40–7:26   可审计输出、Docker、工具对比、诚实边界、结尾
 ```
 
 节奏原则：
 
-1. **先给结果，再给机制**：开场 3 秒就出现“小字母 → 一整条蛋白”。
-2. **每场只讲一个动作**：REF、allele、blocks、protein、TSV 各自独立。
-3. **关键转折留半拍**：`--strict`、unresolved、TRA/BND/CNV 出现时，动画放慢 6–8 帧。
-4. **不把限制藏到最后**：在“看起来很顺”之后立刻讲“它也会说不”，可信度更高。
-5. **结尾不喊口号**：用 GitHub / Docker 两个胶囊落地。
+1. **每 20–30 秒只推进一个概念**，不在一句话里塞三个术语。
+2. **术语第一次出现时给比喻/解释**：intron = 会被剪掉的段落；phasing = 知道哪份拷贝是哪份。
+3. **关键结论先说**：终止密码子失灵那一段，先回答“会发生”，再讲工具怎么做。
+4. **限制不藏在最后当免责声明**：用“两份菜谱混在一起”“跳页”“搬家”这些具体画面讲。
+5. **不单独讲 `--strict`**：把它降级为“对不上就提醒”的一个小动作，不占用独立镜头。
 
 ## 分镜表
 
 | # | 时间 | 场景 | 画面 | 旁白 | 动效 / 节奏 |
 |---:|---|---|---|---|---|
-| 01 | 00:00–00:07.4 | Hook | 奶油底；左边大字“把小字母变成一整条蛋白”；右边 VCF 卡 + 蛋白珠链 | 如果把 VCF 里的一个小字母，变成一整条蛋白，会发生什么？ | 标题 2 帧入场；VCF 卡 20f；珊瑚箭头 38f；蛋白珠 34f 逐个弹入；金色下划线 18–42f 拉开 |
-| 02 | 00:07.4–00:17.6 | Problem | 三张“迷路卡”：负链 / 跨外显子 / 结构变异；虚线路径；右上“REF 对不上？”气泡 | 以前的流程，逐个外显子翻译。可一遇到负链、跨外显子，或者结构变异，它就容易迷路。 | 卡片 12/22/32f 错峰；虚线 20–60f 从左到右；气泡 40f 浮入 |
-| 03 | 00:17.6–00:26.1 | Inputs | genome.fa / annotation.gtf / sample.vcf 三张文件卡；三支箭头汇入 mutatedSequence 引擎卡 | 现在，只要三样东西：参考基因组、转录本注释，还有你的 VCF。 | 文件卡 10/18/26f；三支箭头 28f 同时向下；引擎卡 24f 缩放进入；optional 标签 36f |
-| 04 | 00:26.1–00:38.6 | REF check | chr1 染色体条 + 变异红点；VCF 卡 REF C / genome A；右侧 green match + red mismatch + `--strict` 闸门 | 第一步，先对暗号：VCF 的 REF，和参考基因组对得上吗？对不上，就温柔提醒；用了 strict，它才会立刻喊停。 | 染色体 12f；VCF 卡 16f；绿/红两行 24/32f 错峰；`--strict` 46f 落下，exit 2 胶囊脉冲 |
-| 05 | 00:38.6–00:52.1 | Allele | 四枚 GT 胶囊（0/1、1/1、1/2、1\|0）；选中 0/1；右侧 ALT1 selected / ALT2 not applied；底部“所有 ALT 一起上？不行” | 第二步，选等位基因。零比一、一比一、一比二，还有 phased 的基因型；一个共识只选一个 ALT，别让所有等位基因挤在一起。 | GT 12/18/24/30f 从左滑入；choose 箭头 30f；ALT 卡 34/42f；红色叉号 52f 轻弹 |
-| 06 | 00:52.1–01:04.9 | Blocks | 基因组带：exon 1/2/3；红色虚线 bracket 跨 intron；INS 三角；下方 reference / ALT / insertion 三种 block 芯片；提取卡“exon1 + exon2 → mutated cDNA” | 第三步，把变异画成基因组上的积木。参考块、替换块、插入块；就算 deletion 横跨内含子，也能准确切回外显子。 | 基因组线 8–38f 拉开；exon 12/16/20f；bracket 28f 下压；block 芯片 40f；提取卡 58f；箭头 64f |
-| 07 | 01:04.9–01:18.1 | Protein | 四栏：exons → cDNA → CDS → protein；序列条；N pad / stop 标签；annotated + 3′ extended 两条蛋白珠链 | 第四步，沿着注释切出 cDNA、CDS，再翻译成蛋白。五撇端的 N 补齐、终止密码子、三撇端延伸，都会分开处理。 | 四栏 10/18/26/34f 错峰；序列条逐行；蛋白珠 38/44f 两轮；N pad/stop 标签 30f |
-| 08 | 01:18.1–01:29.6 | Outputs | mutation_report.tsv 表格：variant / REF-ALT / allele / protein；下方 before → after 序列条；右侧 FASTA / normalized.vcf / run_summary；AUDITABLE 印章 | 第五步，写出可审计的 TSV：原始 REF 和 ALT、选中的等位基因、突变前后的序列，一条都不少。 | 表格 10f；行 14–26f 错峰；before/after 38/44f；右侧卡 32f；印章 52f 旋转盖下 |
-| 09 | 01:29.6–01:42.6 | Limits | 三张 “not modeled” 卡：phasing / splicing / TRA-BND-CNV；下方 supported DEL/INS/DUP/INV 芯片；右上诚实气泡 | 当然，它也有做不到的事：真正的 phasing、剪接跳跃、TRA、BND、CNV。遇到这些，它会诚实地说：我处理不了。 | 卡片 12/20/28f；气泡 40f；supported 芯片 52f；语气放慢，画面不抖 |
-| 10 | 01:42.6–01:52.2 | Outro | 中心 DNA 图标 + “把 VCF 变成完整、可解释的蛋白”；mutatedSequence 字标；GitHub / Docker Hub 胶囊；open source / 10 tests / chr21 validated | 把 VCF 变成完整、可解释的蛋白。mutatedSequence，开源，Docker 一键运行。 | 图标 2f；标题 12f；链接 30f；金色线 10–44f；星星轻闪；最后 8f 淡出 |
+| 01 | 00:00–00:56 | **Why** 海量突变，缺一座桥 | 左边大字；右边 WGS reads → VCF 小表 → 虚线问号 → 抽象蛋白结构（AlphaFold3 / RoseTTAFold / ESM 标签） | 过去十几年，WGS 让测序成本下降……AI 把蛋白结构预测推到新高度……但两条线之间缺一座桥。 | 55s；reads 12f、VCF 22f、问号 34f、结构 50f；问号持续呼吸；字幕 3 段 |
+| 02 | 00:56–01:32 | **Map** VCF 只是地址，不是蛋白 | 三张比喻卡：菜谱（genome）→ 抄页（transcript）→ 菜（protein）；书页上有一个红色变异点；底部四个坑：正反方向、剪接、indel/stop、起始位点 | 基因组是菜谱，转录本是抄页，蛋白是菜……直接拿 VCF 翻译，就像拿缺页、倒装的菜谱做菜。 | 35s；卡片 10/20/30f；箭头 24–52f；底部坑位 40f；字幕 3 段 |
+| 03 | 01:32–02:06 | **Inputs** 三样东西 | 三张文件卡 + 三支箭头汇入 mutatedSequence 引擎；可选 cDNA/CDS/pep 小标签 | 参考基因组、转录本注释、你的 VCF；可选再给 cDNA、CDS、蛋白 FASTA 用来核对；输出 cDNA、CDS、蛋白、审计表。 | 33.5s；文件卡错峰；箭头同时向下；引擎卡 24f；字幕 4 段 |
+| 04 | 02:06–02:35 | **Ref** 先对地址 | 染色体条 + 变异红点；VCF REF C vs 参考基因组 A；绿色“对上了”/红色“对不上”；底部提醒 assembly/染色体名/坐标 | 第一步先对地址：VCF 说原来 C，工具回参考基因组确认；对不上多半是地图/坐标拿错，不硬翻译。 | 27.5s；染色体 12f；VCF 16f；两行 24/32f；字幕 3 段 |
+| 05 | 02:35–03:08 | **Allele** 两份拷贝，选一份 | 四枚 GT 胶囊：0/1、1/1、1/2、1\|0；选中 0/1；右侧两个版本卡；底部“两个版本混在一起？不行” | 人是二倍体，同一位置可能有两份拷贝；0/1、1/1、1/2；一条序列只能选一个版本；没 phasing 就是 mosaic。 | 32.4s；GT 12/18/24/30f；选择箭头 30f；版本卡 34/42f；字幕 3 段 |
+| 06 | 03:08–03:35 | **Blocks** 先在基因组上改 | 基因组带 exon 1/2/3；删除括号跨 intron；插入三角；下方“原基因组/改后的块/插入的块”芯片；提取卡“exon1 + exon2 → 突变后 cDNA” | 不要先切外显子再改；先在整段基因组上改，再按注释切；删除跨内含子、负链都能拼。 | 25.7s；线 8–38f；exon 12/16/20f；括号 28f；芯片 40f；提取卡 58f；字幕 3 段 |
+| 07 | 03:35–04:05 | **Protein** 外显子拼成蛋白 | 四栏：剪接外显子 → 完整抄页 → 编码区 → 翻译；序列条；5′ N 补齐 / stop 标签；正常翻译 vs 3′ 延伸两条蛋白珠链 | 外显子拼成 cDNA，编码区拼成 CDS，再翻译成蛋白；5′ 缺一小段用 N 补齐，终止密码子单独补，3′ UTR 在 stop 丢失时参与翻译。 | 29.4s；四栏 10/18/26/34f；序列条逐行；蛋白珠 38/44f；字幕 3 段 |
+| 08 | 04:05–04:50 | **Stop** 终止密码子失灵 | 密码子轨道 `… GCT TAA`；TAA→CAA；STOP 牌裂开；核糖体滑过原 stop；下方两条结局：遇到下一个 stop / 走到序列尽头；小字“默认 3′ UTR，最多 5 kb” | **会发生。** TAA 改成 CAA，或 indel 撞坏 stop，工具继续同阅读框翻译，直到下一个 stop 或序列尽头；默认看剪接 3′ UTR，最多 5 kb；找不到就标 stop_lost；不会无限翻整条染色体。 | 43.9s；轨道 12f；突变 34f；核糖体 50–150f 滑行；结局卡 76f；字幕 4 段；这是全片最重要的“回答问题”镜头 |
+| 09 | 04:50–05:16 | **Outputs** 每一步都能对账 | mutation_report.tsv 表格；before→after 序列条；FASTA/normalized.vcf 卡片；可复查印章 | 每行一个变异×转录本：REF/ALT、选中的 allele、突变前后 cDNA/CDS/蛋白；还有 FASTA 和 normalized VCF；不是一句 p. 注释。 | 25.4s；表格 10f；行 14–26f；before/after 38/44f；侧卡 32f；印章 52f；字幕 3 段 |
+| 10 | 05:16–05:36 | **Docker** 一条命令 | 深色终端卡；`docker pull`、`docker run -it --rm`、`-v`、`-w`、`--genome/--gtf/--vcf/--out`、`--sample`、可选 `--cds/--cdna/--pep`；右侧参数解释列表 | 不想装环境用 Docker；pull 拉镜像；-it 开终端，--rm 用完删，-v 挂载目录，-w 工作目录；--genome/--gtf/--vcf/--out 输入输出，--sample 选样本。 | 19.3s；终端 12f；参数行 30–58f；字幕 5 段；**不单独提 --strict** |
+| 11 | 05:36–06:29 | **Compare** 它站在哪 | 4 行工具对比 + 高亮 mutatedSequence 行：VEP/SnpEff（查字典）、bcftools csq（快注释）、Haplosaurus/VCF2Prot（phased 蛋白）、ORFan（transcript+peptide）；底部“不是全面更好，是解决另一段路” | VEP/SnpEff 像字典，给注释不一定给完整序列；csq 很快但也只是注释；Haplosaurus/VCF2Prot 要 phasing，偏 CDS/蛋白；ORFan 新，偏 coding exonic；我们做完整 cDNA/CDS/蛋白 + 审计 + SV/partial。 | 51.6s；前四行 16–40f；高亮行 52f；字幕 4 段；**不贬低竞品，讲定位** |
+| 12 | 06:29–07:08 | **Limits** 做不到，就诚实说 | 三张卡：两份菜谱混在一起（phasing）/ 跳页（splicing）/ 搬家复制倒装（TRA/BND/CNV）；下方 supported `<DEL>/<INS>/<DUP>/<INV>`；右上“不确定就标出来” | 没 phasing 会混成 mosaic；剪接跳页不会自动生成新版本；TRA/BND/CNV 线性转录本装不下；线粒体/硒蛋白另一套密码本；地图不一致先处理；做不到就标记、跳过、提醒，不猜。 | 38.4s；卡 12/20/28f；supported 52f；字幕 5 段；画面不吓人，语气坚定 |
+| 13 | 07:08–07:26 | **Outro** | 中心 DNA 图标；大标题“把 VCF 变成完整、可解释的蛋白”；GitHub / Docker Hub 胶囊；open source / 10 tests / chr21 validated | 把 VCF 变成完整、可解释的蛋白；开源、中英文文档、测试数据、Docker；从一条转录本开始，接进肿瘤或遗传分析。 | 17.5s；图标 2f；标题 12f；链接 30f；金色线 10–44f；最后淡出 |
 
-## 旁白与 TTS
+## 关键科学问题：终止密码子失灵
+
+这是第 08 场专门回答的问题，也是工具与“只翻译 CDS”的工具最大的差异之一。
+
+**会发生吗？** 会，而且不罕见：
+
+- 终止密码子被 SNV 改成编码氨基酸（例如 `TAA → CAA`）；
+- frameshift 或 indel 把终止密码子撞坏；
+- deletion 把终止密码子删掉；
+- stop codon 跨 exon junction 时被剪接/变异破坏；
+- 参考转录本本身就是 3′ 不完整（`mRNA_end_NF`），根本没有 stop 可失去。
+
+**工具怎么做？**
+
+1. 构建突变后的 CDS，包括 GTF 的 `stop_codon`（如果注释没把它写进 CDS）。
+2. 默认再接上**剪接后的 3′ UTR**，最多 `--extend-bp`（默认 5000）。
+3. 在同一个阅读框里翻译：
+   - 遇到下一个 in-frame stop：停在那里，蛋白比参考更长；`protein_ext_stop=true`；
+   - 一直到可用序列结束都没有 stop：翻译到终点，标记 `stop_lost=true` / `protein_ext_stop=false`；
+4. 同时输出 annotated protein（只看注释 CDS）和 extended protein（带 3′ 延伸），不会假装“第一个 stop 还在”。
+5. 它**不会无限翻译整条染色体**；默认只到转录本 3′ 端。如果下一个 stop 在转录本外，可以显式打开 `--extend-mode utr+genomic` / `genomic`，并注意 genomic 延伸可能包含内含子。
+
+视频里用“STOP 牌裂开、核糖体滑过去”的画面讲这件事；字幕只保留“继续翻译到下一个 stop / 找不到就标 stop_lost”。
+
+## 旁白与字幕
 
 - 生成脚本：`scripts/generate_tts.py`
 - 音色：`zh-CN-XiaoyiNeural`
-- 参数：`--rate=-4% --pitch=+2Hz`
-- 每场尾部留 **1.0 秒** 呼吸；`timing.json` 按实际 mp3 时长计算画面帧数。
-- 字幕直接使用旁白文本；不做逐字高亮（v1 以完整语义为主）。
-- 所有技术词保留英文：`VCF`、`REF`、`ALT`、`allele`、`consensus`、`phasing`、`splicing`、`TRA/BND/CNV`。
-
-## 制作与渲染
-
-```bash
-cd animation
-python scripts/generate_tts.py      # 重新生成旁白 + timing.json
-npm install
-npm start                           # Remotion Studio 预览
-./render.sh                         # Docker 渲染 1080p MP4
-```
-
-渲染环境包含 Chromium Headless Shell 所需库和 Noto CJK 字体；视频输出在 `out/explainer.mp4`。
+- 参数：`rate -6%`, `pitch +2Hz`
+- 每场尾部 **0.9 秒** 呼吸；`timing.json` 按实际 MP3 时长计算帧数。
+- 每场 2–5 个短字幕块，按时间平均切换；不逐字滚动。
+- 术语第一次出现时给解释；字幕避免同时出现超过 2 个缩写。
 
 ## 刻意不做的
 
-- 不做 3D DNA 旋转：信息密度已经够高，3D 会抢旁白。
-- 不做逐字卡拉 OK 字幕：中文断词容易碎，改用整句字幕。
-- 不把全部限制塞进画面：只保留 phasing / splicing / TRA-BND-CNV 三类，细节留给 README。
-- 不用悲伤/警告红铺满画面：这是“温柔而诚实”，不是故障演示。
+- 不在开场讲“一个小字母”的抽象假设；先给 WGS/AI 的真实背景。
+- 不单独讲 `--strict`；只保留“对不上就提醒”。
+- 不把 VEP/SnpEff 说成“错的”；讲清楚它们是注释器，定位不同。
+- 不堆 HTML/CLI 参数；Docker 只讲最关键的 7 个参数，其余放画面里。
+- 不用 3D 蛋白旋转抢戏；用抽象曲线表示结构。
+- 不把“限制”做成免责声明；用具体比喻讲“为什么做不到”。
+
+## 制作
+
+```bash
+cd animation
+python scripts/generate_tts.py
+npm install
+npm start                 # 预览
+./render.sh               # Docker 渲染
+```
+
+输出：`out/explainer.mp4`。线上版本会嵌入
+[博客文章](https://wenyuhaokikika.github.io/2026/10/24/mutatedsequence-vcf-to-transcript-protein/)。

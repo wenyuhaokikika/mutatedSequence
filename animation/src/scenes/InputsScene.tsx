@@ -51,21 +51,21 @@ export const InputsScene: React.FC<SceneProps> = ({scene, index, total}) => {
           <FileCard
             kind="dna"
             title="genome.fa"
-            subtitle="GRCh38 reference · .fai 随机访问"
+            subtitle="参考基因组 · 快速随机读取"
             color={COLORS.coral}
             delay={10}
           />
           <FileCard
             kind="gtf"
             title="annotation.gtf"
-            subtitle="exon / CDS / stop_codon / UTR"
+            subtitle="外显子 / 编码区 / 终止密码子"
             color={COLORS.teal}
             delay={18}
           />
           <FileCard
             kind="vcf"
             title="sample.vcf"
-            subtitle="SNV / indel / GT / 常见 SV"
+            subtitle="单碱基 / 插入缺失 / 基因型 / 结构变异"
             color={COLORS.gold}
             delay={26}
           />
@@ -125,12 +125,12 @@ export const InputsScene: React.FC<SceneProps> = ({scene, index, total}) => {
                   mutatedSequence
                 </div>
                 <div style={{fontSize: 15, color: COLORS.muted, marginTop: 5}}>
-                  genome-first blocks → cDNA / CDS / protein
+                  先在基因组上改，再切转录本和蛋白
                 </div>
               </div>
             </div>
             <div style={{display: 'flex', gap: 8, flexWrap: 'wrap', justifyContent: 'flex-end', maxWidth: 330}}>
-              {['cDNA', 'CDS', 'annotated protein', '3′ extended'].map((x) => (
+              {['cDNA', '编码区', '正常蛋白', '3′ 延伸'].map((x) => (
                 <span
                   key={x}
                   style={{
@@ -160,7 +160,7 @@ export const InputsScene: React.FC<SceneProps> = ({scene, index, total}) => {
           }}
         >
           <span style={{fontSize: 13, color: COLORS.muted}}>optional validation:</span>
-          {['cDNA FASTA', 'CDS FASTA', 'pep FASTA'].map((x) => (
+          {['转录本 FASTA', '编码区 FASTA', '蛋白 FASTA'].map((x) => (
             <span
               key={x}
               style={{

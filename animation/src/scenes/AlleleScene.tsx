@@ -99,7 +99,7 @@ export const AlleleScene: React.FC<SceneProps> = ({scene, index, total}) => {
         <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
           <div style={fadeUp(title, 18)}>
             <Pill color={COLORS.coral} bg={COLORS.coralSoft} style={{marginBottom: 14}}>
-              step 02 · allele
+              step 02 · 选版本
             </Pill>
             <h2
               style={{
@@ -111,9 +111,9 @@ export const AlleleScene: React.FC<SceneProps> = ({scene, index, total}) => {
                 fontWeight: 900,
               }}
             >
-              一个 consensus，
+              两份拷贝，
               <br />
-              <span style={{color: COLORS.coral}}>只选一个 ALT</span>
+              <span style={{color: COLORS.coral}}>只选一个版本</span>
             </h2>
           </div>
           <div style={{fontSize: 15, color: COLORS.muted, lineHeight: 1.6, textAlign: 'right'}}>
@@ -126,13 +126,13 @@ export const AlleleScene: React.FC<SceneProps> = ({scene, index, total}) => {
         <div style={{display: 'flex', alignItems: 'center', gap: 34, marginTop: 42}}>
           <div style={{width: 540, ...fadeUp(left, 18)}}>
             <div style={{fontFamily: MONO, fontSize: 13, color: COLORS.muted, marginBottom: 12}}>
-              genotype
+              基因型
             </div>
             <div style={{display: 'flex', flexDirection: 'column', gap: 10}}>
-              <GenotypeChip gt="0/1" label="heterozygous · one ALT" active delay={12} />
-              <GenotypeChip gt="1/1" label="homozygous ALT" delay={18} />
-              <GenotypeChip gt="1/2" label="two different ALTs" delay={24} />
-              <GenotypeChip gt="1|0" label="phased · hap1 has ALT" delay={30} />
+              <GenotypeChip gt="0/1" label="一份参考，一份突变" active delay={12} />
+              <GenotypeChip gt="1/1" label="两份都突变" delay={18} />
+              <GenotypeChip gt="1/2" label="两份突变不一样" delay={24} />
+              <GenotypeChip gt="1|0" label="phased：知道哪份是哪份" delay={30} />
             </div>
             <div
               style={{
@@ -144,9 +144,9 @@ export const AlleleScene: React.FC<SceneProps> = ({scene, index, total}) => {
                 opacity: left,
               }}
             >
-              hap1 / hap2 不是魔法：
+              两条拷贝不是魔法：
               <br />
-              未 phasing 时，它们只是按 GT 顺序取。
+              没 phasing 时，只是按基因型顺序取。
             </div>
           </div>
 
@@ -158,15 +158,15 @@ export const AlleleScene: React.FC<SceneProps> = ({scene, index, total}) => {
           <div style={{flex: 1, ...fadeUp(right, 16)}}>
             <div style={{display: 'flex', gap: 18}}>
               <AlleleCard
-                title="ALT 1 · 0/1"
-                detail="C → A，选中的 mutant allele；REF/ALT 与 GT 一起保留。"
+                title="版本 1 · 0/1"
+                detail="C → A，选中的突变版本；原始 REF/ALT 与基因型一起保留。"
                 color={COLORS.coral}
                 active
                 delay={34}
               />
               <AlleleCard
-                title="ALT 2 · 1/2"
-                detail="另一个 ALT 不会被偷偷应用；需要时单独跑 hap2。"
+                title="版本 2 · 1/2"
+                detail="另一个版本不会被偷偷应用；需要时单独跑 hap2。"
                 color={COLORS.lavender}
                 delay={42}
               />
@@ -186,7 +186,7 @@ export const AlleleScene: React.FC<SceneProps> = ({scene, index, total}) => {
             >
               <span style={{fontSize: 17, color: COLORS.coral, fontWeight: 800}}>×</span>
               <span style={{fontSize: 14, color: COLORS.muted, lineHeight: 1.5}}>
-                所有 ALT 一起上？不行。一个 consensus 只能有一个 allele。
+                两个版本混在一起？不行。一条序列只能有一个版本。
               </span>
             </div>
           </div>

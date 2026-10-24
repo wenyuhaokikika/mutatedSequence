@@ -69,7 +69,7 @@ export const OutputsScene: React.FC<SceneProps> = ({scene, index, total}) => {
               <span style={{fontFamily: MONO, fontSize: 14, fontWeight: 800}}>
                 mutation_report.tsv
               </span>
-              <SampleTag text="one row per variant × transcript" color={COLORS.green} />
+              <SampleTag text="一行一个变异 × 转录本" color={COLORS.green} />
             </div>
             <div
               style={{
@@ -84,10 +84,10 @@ export const OutputsScene: React.FC<SceneProps> = ({scene, index, total}) => {
                 letterSpacing: 0.5,
               }}
             >
-              <span>variant</span>
-              <span>REF/ALT</span>
-              <span>allele</span>
-              <span>protein</span>
+              <span>变异</span>
+              <span>原来 → 改成</span>
+              <span>版本</span>
+              <span>蛋白</span>
             </div>
             {rows.map((row, i) => (
               <div
@@ -127,7 +127,7 @@ export const OutputsScene: React.FC<SceneProps> = ({scene, index, total}) => {
                 lineHeight: 1.55,
               }}
             >
-              transcript_ref → transcript_alt · cds_ref → cds_alt · protein_ref → protein_alt
+              突变前 → 突变后：cDNA / CDS / 蛋白
             </div>
             <div
               style={{
@@ -205,7 +205,7 @@ export const OutputsScene: React.FC<SceneProps> = ({scene, index, total}) => {
                   background: 'rgba(255,253,252,0.55)',
                 }}
               >
-                AUDITABLE
+                可复查
               </div>
             </div>
           </div>

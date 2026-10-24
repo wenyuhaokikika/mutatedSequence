@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Generate the narration and timing for the Remotion explainer.
 
-Voice: zh-CN-XiaoyiNeural (female, lively) at -4% rate and +2 Hz pitch.
+Voice: zh-CN-XiaoyiNeural (female, lively) at -6% rate and +2 Hz pitch.
 The result is intentionally a little playful and gentle, not a newsreader.
 """
 
@@ -21,64 +21,149 @@ AUDIO_DIR = ROOT / "public" / "narration"
 TIMING_PATH = ROOT / "src" / "timing.json"
 
 VOICE = "zh-CN-XiaoyiNeural"
-RATE = "-4%"
+RATE = "-6%"
 PITCH = "+2Hz"
 FPS = 30
-TAIL_SECONDS = 1.0
+TAIL_SECONDS = 0.9
 
 SCENES = [
     {
-        "id": "hook",
-        "title": "一个字母，一整条蛋白",
-        "narration": "如果把 VCF 里的一个小字母，变成一整条蛋白，会发生什么？",
+        "id": "why",
+        "title": "海量突变，缺一座桥",
+        "narration": "过去十几年，全基因组测序，也就是 WGS，让测序成本一路下降。今天，我们手里有大量突变数据：有肿瘤里后天出现的 somatic 变异，也有与生俱来、可能传给下一代的 germline 变异。另一条线上，AI 把蛋白结构预测推到了新高度。AlphaFold3、RoseTTAFold、ESM，已经能从一条氨基酸序列，比较准确地预测结构、功能和理化性质。但这两条线之间，一直缺一座桥。VCF 里只有基因组坐标和碱基改变；蛋白模型要的，却是一条干净的氨基酸序列。怎么从测序得到的 VCF，走到蛋白序列，再走到结构？这就是今天要讲清楚的事。",
+        "captions": [
+            "WGS 让突变数据爆发：somatic + germline",
+            "AI 让序列 → 结构、功能、理化性质越来越准",
+            "但中间缺一座桥：VCF → 蛋白序列",
+        ],
     },
     {
-        "id": "problem",
-        "title": "只按外显子翻译，会迷路",
-        "narration": "以前的流程，逐个外显子翻译。可一遇到负链、跨外显子，或者结构变异，它就容易迷路。",
+        "id": "map",
+        "title": "VCF 只是地址，不是蛋白",
+        "narration": "先别急着写代码。可以把基因组想成一本很厚的菜谱，转录本是从书里抄出来的一页，蛋白是照着这页做出来的菜。VCF 只告诉你：第几页、第几个字，从什么改成了什么。可抄页的时候，细胞会剪掉一些段落，也就是 intron；还会选择从哪一页开始、往哪个方向抄。直接拿 VCF 去翻译，就像拿一本有缺页、有倒装、还有批注的菜谱做菜，很容易出错。",
+        "captions": [
+            "基因组是菜谱，转录本是抄页，蛋白是菜",
+            "VCF 只写：哪个位置、哪个碱基变了",
+            "剪接、正反方向、缺页，都会让直接翻译出错",
+        ],
     },
     {
         "id": "inputs",
         "title": "三样东西，就够了",
-        "narration": "现在，只要三样东西：参考基因组、转录本注释，还有你的 VCF。",
+        "narration": "工具需要三样东西。第一，参考基因组，也就是那本标准菜谱。第二，转录本注释，告诉它每一页从哪开始、到哪里结束、哪些段落会被剪掉。第三，你的 VCF，记录这个样本改了什么。可选再给 cDNA、CDS、蛋白 FASTA，用来核对。输出呢？每条转录本的突变后 cDNA、CDS、蛋白，还有一张能逐条对账的表。",
+        "captions": [
+            "参考基因组：标准菜谱",
+            "注释：每页的起止和剪接",
+            "VCF：这个样本改了什么",
+            "输出：cDNA、CDS、蛋白、审计表",
+        ],
     },
     {
         "id": "ref",
-        "title": "先对暗号",
-        "narration": "第一步，先对暗号：VCF 的 REF，和参考基因组对得上吗？对不上，就温柔提醒；用了 strict，它才会立刻喊停。",
+        "title": "先对地址，再翻译",
+        "narration": "第一步，先对地址。VCF 说，某个位置原来是 C，现在变成 T。工具会回到参考基因组，确认那个位置真的是 C。对不上，通常不是工具坏了，而是地图拿错了：assembly 不一致、染色体名字不一样，或者你把转录本坐标当成了基因组坐标。对不上就提醒你，不硬翻译。",
+        "captions": [
+            "先确认：VCF 的 REF 和参考基因组对得上吗？",
+            "对不上，多半是地图或坐标拿错了",
+            "不硬翻译，先提醒",
+        ],
     },
     {
         "id": "allele",
-        "title": "选一个等位基因",
-        "narration": "第二步，选等位基因。零比一、一比一、一比二，还有 phased 的基因型；一个共识只选一个 ALT，别让所有等位基因挤在一起。",
+        "title": "两份拷贝，选一份",
+        "narration": "第二步，选等位基因。人是二倍体，同一个位置可能有两份拷贝。0/1 表示一份参考、一份突变；1/1 表示两份都突变；1/2 表示两份突变得还不一样。一个线性序列只能选一个版本。工具会把选择写进结果，不会把两个版本混在一起。没有 phasing 的时候，它也会老实告诉你：这是一个 mosaic，不是真实的两条单倍型。",
+        "captions": [
+            "同一个位置，可能有两份拷贝",
+            "0/1、1/1、1/2 怎么选？",
+            "一个序列只选一个版本；没 phasing 就是 mosaic",
+        ],
     },
     {
         "id": "blocks",
-        "title": "把变异画成积木",
-        "narration": "第三步，把变异画成基因组上的积木。参考块、替换块、插入块；就算 deletion 横跨内含子，也能准确切回外显子。",
+        "title": "先在基因组上改",
+        "narration": "第三步，把变异画成基因组上的积木。不是先切外显子再改，而是先在整段基因组上改，再按注释把外显子切出来。这样，哪怕一个 deletion 横跨内含子，或者把整个外显子删掉，工具也知道该怎么拼。负链基因也一样：先在正链上改，再把整段外显子反向互补。",
+        "captions": [
+            "先在基因组上改，再切外显子",
+            "deletion 跨内含子也能拼",
+            "负链：整段反向互补",
+        ],
     },
     {
         "id": "protein",
-        "title": "从外显子到蛋白",
-        "narration": "第四步，沿着注释切出 cDNA、CDS，再翻译成蛋白。五撇端的 N 补齐、终止密码子、三撇端延伸，都会分开处理。",
+        "title": "外显子拼成蛋白",
+        "narration": "第四步，拼出转录本和蛋白。外显子按顺序拼成 cDNA；再把编码区拼成 CDS；最后按三个碱基一个密码子翻译成蛋白。这里还要处理几个细节：有些转录本五撇端缺了一小段，要用 N 补齐；有些注释不把终止密码子写进 CDS，要单独补上；还有三撇端，会在 stop 丢失时参与翻译。",
+        "captions": [
+            "外显子 → cDNA",
+            "编码区 → CDS",
+            "CDS → 蛋白；补 N、补 stop、保留 3′ UTR",
+        ],
+    },
+    {
+        "id": "stop",
+        "title": "终止密码子失灵",
+        "narration": "你问的那个情况，确实会发生：终止密码子失灵。比如 TAA 被改成 CAA，或者一个 indel 把终止密码子撞坏了。工具会继续沿着同一个阅读框翻译，直到遇见下一个终止密码子，或者走到这条转录本可用序列的尽头。默认它会看剪接后的三撇端 UTR，最多延伸五千个碱基；如果下一个 stop 在转录本之外，可以打开 genomic 延伸；如果一直没有 stop，它会明确标记：stop_lost，蛋白没有正常终止。它不会假装蛋白在第一个 stop 就结束了。",
+        "captions": [
+            "终止密码子失灵：TAA → CAA",
+            "继续翻译，直到下一个 stop",
+            "找不到 stop：标记 stop_lost",
+            "默认延伸 3′ UTR；不会无限翻整条染色体",
+        ],
     },
     {
         "id": "outputs",
-        "title": "每一步都能审计",
-        "narration": "第五步，写出可审计的 TSV：原始 REF 和 ALT、选中的等位基因、突变前后的序列，一条都不少。",
+        "title": "每一步都能对账",
+        "narration": "第五步，把过程写成一张能对账的表。每一行是一个变异、一条转录本：原始 REF 和 ALT、选中的 allele、突变前后的 cDNA、CDS、蛋白，都放在一起。还会输出 FASTA 和 normalized VCF。你不是只得到一句 p. 注释，而是拿到可以复查的完整序列。",
+        "captions": [
+            "一行一个变异 × 转录本",
+            "REF/ALT、allele、前后序列",
+            "TSV + FASTA + normalized VCF",
+        ],
+    },
+    {
+        "id": "docker",
+        "title": "一条 Docker 命令",
+        "narration": "不想装环境，用 Docker。docker pull 拉镜像；docker run 里，-it 开终端，--rm 用完删容器，-v 挂载目录，-w 指定工作目录；--genome、--gtf、--vcf、--out 是输入输出，--sample 选样本。",
+        "captions": [
+            "docker pull 拉镜像",
+            "-it 开终端；--rm 用完删",
+            "-v 挂载目录；-w 工作目录",
+            "--genome/--gtf/--vcf/--out 输入输出",
+            "--sample 选样本；可选 --cds/--cdna/--pep",
+        ],
+    },
+    {
+        "id": "compare",
+        "title": "它站在哪？",
+        "narration": "那为什么不直接用 VEP、SnpEff，或者 bcftools？因为它们更像字典和注释器：告诉你变异落在哪个基因、可能什么后果，但不一定给你完整 cDNA、CDS 和蛋白。Haplosaurus 和 VCF2Prot 能在知道哪份拷贝是哪份时拼出蛋白，但通常要求先做这一步，主要做 CDS 和蛋白。ORFan 能直接出突变转录本和短肽，但比较新，主要做编码区。我们的定位不一样：完整 cDNA、CDS、蛋白，负链、跨外显子、不完整转录本、常见结构变异，加上一张逐条审计的表。不是全面更好，是解决另一段路。",
+        "captions": [
+            "VEP / SnpEff：像查字典，主要给注释",
+            "bcftools csq：很快，但也不出完整序列",
+            "Haplosaurus / VCF2Prot：知道哪份拷贝时，能拼蛋白",
+            "我们：完整序列 + 审计 + 不完整转录本/结构变异",
+        ],
     },
     {
         "id": "limits",
-        "title": "它也会诚实说不",
-        "narration": "当然，它也有做不到的事：真正的 phasing、剪接跳跃、TRA、BND、CNV。遇到这些，它会诚实地说：我处理不了。",
+        "title": "做不到，就诚实说",
+        "narration": "当然，它也有做不到的事。没有 phasing 的两个副本，会被混成一个 mosaic；剪接位点导致的跳页，它仍按原目录翻，不会自动生成新版本；TRA、BND、CNV 这种把两本书段落搬来搬去、整章复制的重排，一条线性转录本装不下；线粒体、硒蛋白用的是另一套密码本；VCF 和基因组不是同一版地图，地址就会对不上。遇到这些，它会标记、跳过，或者提醒你先处理，而不是猜一个看起来合理的答案。",
+        "captions": [
+            "没 phasing：两个副本会混成 mosaic",
+            "剪接跳页：按原目录，不自动生成新版本",
+            "TRA/BND/CNV：线性转录本装不下",
+            "另一套密码本 / 地图不一致：先处理",
+            "做不到就标记，不猜",
+        ],
     },
     {
         "id": "outro",
         "title": "mutatedSequence",
-        "narration": "把 VCF 变成完整、可解释的蛋白。mutatedSequence，开源，Docker 一键运行。",
+        "narration": "把 VCF 变成完整、可解释的蛋白。mutatedSequence 开源，有中英文文档、测试数据和 Docker 镜像。你可以先从一条转录本开始，再把它接进自己的肿瘤或遗传分析流程。",
+        "captions": [
+            "把 VCF 变成完整、可解释的蛋白",
+            "开源 · 中英文文档 · 测试数据 · Docker",
+        ],
     },
 ]
-
 
 def audio_duration(path: Path) -> float:
     if shutil.which("ffprobe") is None:

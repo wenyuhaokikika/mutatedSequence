@@ -79,7 +79,7 @@ export const ChromosomeRibbon: React.FC<{
   delay?: number;
   label?: string;
   markerLabel?: string;
-}> = ({width = 660, highlight = 0.42, delay = 0, label = 'chr1', markerLabel = 'REF'}) => {
+}> = ({width = 660, highlight = 0.42, delay = 0, label = '1 号染色体', markerLabel = 'REF'}) => {
   const frame = useCurrentFrame();
   const p = useEnter(delay);
   const pulse = 1 + Math.sin(frame / 11) * 0.08;
@@ -102,7 +102,7 @@ export const ChromosomeRibbon: React.FC<{
         }}
       >
         <span style={{fontFamily: MONO, fontSize: 16, color: COLORS.muted}}>{label}</span>
-        <span style={{fontSize: 13, color: COLORS.muted}}>reference genome</span>
+        <span style={{fontSize: 13, color: COLORS.muted}}>参考基因组</span>
       </div>
       <div
         style={{
@@ -297,10 +297,10 @@ export const VcfCard: React.FC<{
         </span>
       </div>
       <div style={{display: 'flex', alignItems: 'center', gap: 10}}>
-        <span style={{fontSize: 12, color: COLORS.muted, width: 34}}>REF</span>
+        <span style={{fontSize: 12, color: COLORS.muted, width: 34}}>原来</span>
         <Base value={refBase} bg={mismatch ? COLORS.coralSoft : COLORS.tealSoft} color={mismatch ? COLORS.red : COLORS.green} />
         <span style={{fontSize: 16, color: COLORS.muted}}>→</span>
-        <span style={{fontSize: 12, color: COLORS.muted, width: 34}}>ALT</span>
+        <span style={{fontSize: 12, color: COLORS.muted, width: 34}}>改成</span>
         <Base value={altBase} bg={COLORS.goldSoft} color={COLORS.ink} />
       </div>
       <div
@@ -313,7 +313,7 @@ export const VcfCard: React.FC<{
           lineHeight: 1.45,
         }}
       >
-        {mismatch ? 'REF 对不上，先别急着翻译' : '位置、REF、ALT、GT 一起看'}
+        {mismatch ? 'REF 对不上，先别急着翻译' : '位置 + 原来 + 改成 + 基因型'}
       </div>
     </div>
   );

@@ -104,16 +104,17 @@ flowchart TD
 
 ## 动画短片
 
-仓库里有一支 112 秒、1080p/30fps 的 Remotion 流程动画，源码在
+仓库里有一支 7 分 26 秒、1080p/30fps 的 Remotion 流程动画，源码在
 [`animation/`](animation/)。旁白使用中文女声 `zh-CN-XiaoyiNeural`
-（rate -4%，pitch +2Hz），十个镜头按实际配音时长剪辑。
+（rate -6%，pitch +2Hz），十三个镜头按实际配音时长剪辑。
 
 - 分镜与导演说明：[`animation/STORYBOARD.md`](animation/STORYBOARD.md)
 - 源码与渲染说明：[`animation/README.md`](animation/README.md)
 - 在线观看：https://wenyuhaokikika.github.io/2026/10/24/mutatedsequence-vcf-to-transcript-protein/
 - 渲染：`cd animation && ./render.sh` → `animation/out/explainer.mp4`
-- 内容包括：钩子、旧流程的三个痛点、输入、REF 校验与 `--strict`、等位基因、
-  genomic blocks、cDNA/CDS/蛋白、可审计 TSV、诚实边界和结尾。
+- 内容包括：WGS→AI 的缺口、菜谱比喻、输入、REF 校验、等位基因、genomic blocks、
+  cDNA/CDS/蛋白、终止密码子失灵、可审计 TSV、Docker 用法、工具对比、
+  诚实边界和结尾。
 
 ## 2. 安装
 
@@ -710,6 +711,21 @@ in-frame stop，并报告 `protein_ext_stop_*`。
   haplotype-specific 分析；至少做 phasing 或长读长组装。
 
 ---
+
+### 终止密码子失灵 / readthrough
+
+会处理。若注释的终止密码子被替换或删除，突变后的 CDS 仍在原阅读框内翻译。
+默认会继续翻译到**剪接后的 3′ UTR**，上限由 `--extend-bp` 控制（默认 5000）：
+
+- 找到下一个 in-frame stop：extended protein 在那里结束
+  （`protein_ext_stop=true`）；
+- 一直没找到 stop：翻译到可用延伸序列的终点，TSV 标记
+  `stop_lost=true`、`protein_ext_stop=false`；不会假装旧 stop 还在。
+
+它**不会无限翻译整条染色体**。如果下一个 stop 在注释转录本之外，可用
+`--extend-mode utr+genomic`/`genomic` 或增大 `--extend-bp`；`genomic` 可能包含
+intron。`--extend-mode none` 则停在注释 CDS 末端。参考本身就没有 stop 的
+partial_3 模型没有“stop 可失去”；突变新产生 stop 会标记为 `stop_gained`。
 
 ## 9. 明确无法处理的情况（重点）
 
