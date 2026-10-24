@@ -8,6 +8,7 @@ pipeline. The narration is Chinese, performed by the playful-but-gentle
 - **Composition:** `src/index.ts` → `Explainer`
 - **Narration + timing:** `src/timing.json` (generated from the actual MP3s)
 - **Rendered output:** `out/explainer.mp4`
+- **Online cut:** https://wenyuhaokikika.github.io/2026/10/24/mutatedsequence-vcf-to-transcript-protein/
 
 ## The cut
 

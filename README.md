@@ -143,6 +143,7 @@ It uses the playful-but-gentle Chinese voice `zh-CN-XiaoyiNeural` (-4% rate,
 
 - Direction and shot list: [`animation/STORYBOARD.md`](animation/STORYBOARD.md)
 - Source and render instructions: [`animation/README.md`](animation/README.md)
+- Watch the rendered cut: https://wenyuhaokikika.github.io/2026/10/24/mutatedsequence-vcf-to-transcript-protein/
 - Render: `cd animation && ./render.sh` → `animation/out/explainer.mp4`
 - The cut covers the hook, old per-exon pain points, inputs, REF check/`--strict`,
   allele selection, genomic blocks, cDNA/CDS/protein, auditable TSV, honest

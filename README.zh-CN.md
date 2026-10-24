@@ -110,6 +110,7 @@ flowchart TD
 
 - 分镜与导演说明：[`animation/STORYBOARD.md`](animation/STORYBOARD.md)
 - 源码与渲染说明：[`animation/README.md`](animation/README.md)
+- 在线观看：https://wenyuhaokikika.github.io/2026/10/24/mutatedsequence-vcf-to-transcript-protein/
 - 渲染：`cd animation && ./render.sh` → `animation/out/explainer.mp4`
 - 内容包括：钩子、旧流程的三个痛点、输入、REF 校验与 `--strict`、等位基因、
   genomic blocks、cDNA/CDS/蛋白、可审计 TSV、诚实边界和结尾。
