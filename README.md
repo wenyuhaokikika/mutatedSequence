@@ -135,6 +135,19 @@ Core properties:
 
 ---
 
+## Explainer video
+
+A 112-second, 1080p/30 fps Remotion explainer lives in [`animation/`](animation/).
+It uses the playful-but-gentle Chinese voice `zh-CN-XiaoyiNeural` (-4% rate,
++2 Hz pitch) and cuts the 10 scenes to the actual narration durations.
+
+- Direction and shot list: [`animation/STORYBOARD.md`](animation/STORYBOARD.md)
+- Source and render instructions: [`animation/README.md`](animation/README.md)
+- Render: `cd animation && ./render.sh` → `animation/out/explainer.mp4`
+- The cut covers the hook, old per-exon pain points, inputs, REF check/`--strict`,
+  allele selection, genomic blocks, cDNA/CDS/protein, auditable TSV, honest
+  limits and the outro.
+
 ## Install
 
 ```bash

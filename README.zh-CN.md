@@ -102,6 +102,18 @@ flowchart TD
 
 ---
 
+## 动画短片
+
+仓库里有一支 112 秒、1080p/30fps 的 Remotion 流程动画，源码在
+[`animation/`](animation/)。旁白使用中文女声 `zh-CN-XiaoyiNeural`
+（rate -4%，pitch +2Hz），十个镜头按实际配音时长剪辑。
+
+- 分镜与导演说明：[`animation/STORYBOARD.md`](animation/STORYBOARD.md)
+- 源码与渲染说明：[`animation/README.md`](animation/README.md)
+- 渲染：`cd animation && ./render.sh` → `animation/out/explainer.mp4`
+- 内容包括：钩子、旧流程的三个痛点、输入、REF 校验与 `--strict`、等位基因、
+  genomic blocks、cDNA/CDS/蛋白、可审计 TSV、诚实边界和结尾。
+
 ## 2. 安装
 
 
